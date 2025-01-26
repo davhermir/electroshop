@@ -17,30 +17,52 @@ class CategoriasController
     require VIEWS_PATH . '/nav.php';
   }
 
-  public function getCategorias(){
+  public function getCategorias()
+  {
+    $con = conectar_db_pdo();
+    $gestor = new GestorCategorias($con);
+    $categorias = $gestor->getCategorias();
+    $menu = $this->getCategoriasHijas($categorias);
+    return $menu;
+  }
+
+  public function getCategoriasView()
+  {
     $con = conectar_db_pdo();
     $gestor = new GestorCategorias($con);
     $categorias = $gestor->getCategorias();
     $menu = $this->orderCategorias($categorias);
-    require VIEWS_PATH .'/gestionCategoriasView.php';
+    require VIEWS_PATH . '/gestionCategoriasView.php';
   }
 
-public function orderCategorias($categorias){
-  $menu=[];
-  foreach ($categorias as $item) {
-    if ($item->getCodpadre() === null) {
-      $menu[$item->getCodigo()] = [
-        'categoria' => $item,
-        'hijas' => []
-      ];
+  public function orderCategorias($categorias)
+  {
+    $menu = [];
+    foreach ($categorias as $item) {
+      if ($item->getCodpadre() === null) {
+        $menu[$item->getCodigo()] = [
+          'categoria' => $item,
+          'hijas' => []
+        ];
+      }
     }
-  }
-  foreach ($categorias as $item) {
-    if ($item->getCodpadre() !== null) {
-      $menu[$item->getCodpadre()]['hijas'][] = $item;
+    foreach ($categorias as $item) {
+      if ($item->getCodpadre() !== null) {
+        $menu[$item->getCodpadre()]['hijas'][] = $item;
+      }
     }
+    return $menu;
   }
-  return $menu;
-}
+
+  public function getCategoriasHijas($categorias)
+  {
+    $cats = [];
+    foreach ($categorias as $item) {
+      if ($item->getCodpadre() !== null) {
+        $cats[] = $item;
+      }
+    }
+    return $cats;
+  }
 }
 ?>

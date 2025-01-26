@@ -59,7 +59,7 @@ class ArticulosController
    
   }
 
-  public function nuevo_articulo($error)
+  public function nuevo_articulo($error,$categorias)
   {
     $fileSaveError=null;
     $fileError=null;
