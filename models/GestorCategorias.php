@@ -30,7 +30,7 @@ class GestorCategorias
     //Para mostrar los datos de los usuarios 
     public function getCategorias()
     {
-        $sql = "SELECT * FROM categorias ORDER BY codCategoriaPadre DESC";
+        $sql = "SELECT * FROM categorias where activo=1 ORDER BY codCategoriaPadre DESC";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
@@ -53,7 +53,7 @@ class GestorCategorias
     //Para buscar los datos a partir del nombre 
     public function buscarCodigo($cadena)
     {
-        $sql = "SELECT * FROM categorias WHERE codigo LIKE :cadena";
+        $sql = "SELECT * FROM categorias WHERE codigo LIKE :cadena and activo=1";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':cadena', "%$cadena%", PDO::PARAM_STR);
@@ -95,29 +95,11 @@ class GestorCategorias
         }
     }
 
-    //Para eliminar los datos a partir del nombre del usuario 
-    public function eliminar($codigo)
-    {
-        $sql = "UPDATE categorias SET activo=0  WHERE codigo = :codigo";
-        try {
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(':codigo', $codigo);
-
-            if ($stmt->execute()) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            echo "Error al eliminar el articulo: " . $e->getMessage();
-        }
-    }
-
     
 
     public function countTotalCategorias()
     {
-        $stmt = $this->db->prepare("SELECT * FROM categorias");
+        $stmt = $this->db->prepare("SELECT * FROM categorias where activo=1");
         try {
             $stmt->execute();
             return $stmt->rowCount(); 
@@ -127,7 +109,7 @@ class GestorCategorias
     }
 
     public function countTotalCategoriasNombre($nombre){
-        $sql = "SELECT * FROM categorias WHERE nombre LIKE :cadena";
+        $sql = "SELECT * FROM categorias WHERE nombre LIKE :cadena and activo=1";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':cadena', "%$nombre%", PDO::PARAM_STR);
         try {
@@ -137,6 +119,21 @@ class GestorCategorias
             return "Error en la consulta: " . $e->getMessage();
         }
 
+    }
+
+    public function borrarCategoria($codigo){
+        $sql = "UPDATE categorias SET activo=0 WHERE codigo = :codigo";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':codigo', $codigo);
+            if ($stmt->execute()) {
+                header("Location: ?action=gestion_categorias");
+            } else {
+                echo "No se pudieron actualizar los datos.";
+            }
+        } catch (PDOException $e) {
+            echo "Ha habido un error al actualizar los valores: " . $e->getMessage();
+        }
     }
 
 
