@@ -1,0 +1,143 @@
+<?php
+class GestorCategorias
+{
+    private $db;
+    //Constructor base datos 
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
+    //Para insertar los datos de los usuarios 
+    public function insertar(Categoria $categoria)
+    {
+        $sql = "INSERT INTO categorias (codigo,nombre,activo,codCategoriaPadre) VALUES (:codigo,:nombre,:activo,:codCategoriaPadre)";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':codigo', $categoria->getCodigo());
+            $stmt->bindValue(':nombre', $categoria->getNombre());
+            $stmt->bindValue(':activo', $categoria->getActivo());
+            $stmt->bindValue(':codCategoriaPadre', $categoria->getCodpadre());
+            
+            if ($stmt->execute()) {
+                header("Location: listaarticulos.php");
+            } else {
+                return "Ha habido un error al insertar los valores.";
+            }
+        } catch (PDOException $e) {
+            echo "Error al insertar los valores: " . $e->getMessage();
+        }
+    }
+    //Para mostrar los datos de los usuarios 
+    public function getCategorias()
+    {
+        $sql = "SELECT * FROM categorias ORDER BY codCategoriaPadre DESC";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $categorias = [];
+            foreach ($result as $row) {
+                $categorias[] = new Categoria(
+                    $row['codigo'],
+                    $row['nombre'],
+                    $row['activo'],
+                    $row['codCategoriaPadre']
+                );
+            }
+            return $categorias;
+        } catch (PDOException $e) {
+            echo "Error en la consulta: " . $e->getMessage();
+        }
+    }
+
+    //Para buscar los datos a partir del nombre 
+    public function buscarCodigo($cadena)
+    {
+        $sql = "SELECT * FROM categorias WHERE codigo LIKE :cadena";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':cadena', "%$cadena%", PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $categorias = [];
+            foreach ($result as $row) {
+                $categorias[] = new Categoria(
+                    $row['codigo'],
+                    $row['nombre'],
+                    $row['activo'],
+                    $row['codCategoriaPadre']
+                );
+            }
+            return $categorias;
+        } catch (PDOException $e) {
+            return "Error en la búsqueda: " . $e->getMessage();
+        }
+    }
+
+    //Para modificar los datos a partir del nombre del usuario 
+    public function modificar(Categoria $categoria)
+    {
+        $sql = "UPDATE categorias SET nombre=:nombre ,  activo=:activo, codCategoriaPadre=:codCategoriaPadre   WHERE codigo = :codigo";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':codigo', $categoria->getCodigo());
+            $stmt->bindValue(':nombre', $categoria->getNombre());
+            $stmt->bindValue(':activo', $categoria->getActivo());
+            $stmt->bindValue(':codCategoriaPadre', $categoria->getCodpadre());
+
+            if ($stmt->execute()) {
+                header("Location: listaarticulos.php");
+            } else {
+                echo "No se pudieron actualizar los datos.";
+            }
+        } catch (PDOException $e) {
+            echo "Ha habido un error al actualizar los valores: " . $e->getMessage();
+        }
+    }
+
+    //Para eliminar los datos a partir del nombre del usuario 
+    public function eliminar($codigo)
+    {
+        $sql = "UPDATE categorias SET activo=0  WHERE codigo = :codigo";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':codigo', $codigo);
+
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error al eliminar el articulo: " . $e->getMessage();
+        }
+    }
+
+    
+
+    public function countTotalCategorias()
+    {
+        $stmt = $this->db->prepare("SELECT * FROM categorias");
+        try {
+            $stmt->execute();
+            return $stmt->rowCount(); 
+        } catch (PDOException $e) {
+            return "Error en la consulta: " . $e->getMessage();
+        }
+    }
+
+    public function countTotalCategoriasNombre($nombre){
+        $sql = "SELECT * FROM categorias WHERE nombre LIKE :cadena";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':cadena', "%$nombre%", PDO::PARAM_STR);
+        try {
+            $stmt->execute();
+            return $stmt->rowCount(); 
+        } catch (PDOException $e) {
+            return "Error en la consulta: " . $e->getMessage();
+        }
+
+    }
+
+
+}
