@@ -127,7 +127,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             if (isset($_POST['correo']) && isset($_POST['key'])) {
                 $usu = $_POST['correo'];
                 $pwd = $_POST['key'];
-                $usersController = new UsuariosController();
                 $usersController->login($usu, $pwd);
             }
             break;
@@ -140,11 +139,9 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             } else if (isset($_GET['correo_duplicado']) && $_GET['correo_duplicado']) {
                 $error = 'correo_duplicado';
             }
-            $usersController = new UsuariosController();
             $usersController->nuevo_usuario($error);
             break;
         case 'nuevo_usuario_check':
-            $usersController = new UsuariosController();
             $usersController->nuevo_usuario_check();
             break;
         case 'cuenta':
@@ -152,11 +149,9 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             if (isset($_GET['correo_duplicado']) && $_GET['correo_duplicado']) {
                 $error = 'correo_duplicado';
             }
-            $usersController = new UsuariosController();
             $usersController->menu_cuenta(null);
             break;
         case 'update_usuario':
-            $usersController = new UsuariosController();
             $usersController->update_usuario_check();
             break;
         case 'passwd':
@@ -170,7 +165,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             if (isset($_GET['email_duplicado'])) {
                 $error = 'email_duplicado';
             }
-            $usersController = new UsuariosController();
             $usersController->cambio_paswd($error);
             break;
         case 'new_pwd':
@@ -187,9 +181,16 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             }
             break;
         case 'logout':
-            $usersController = new UsuariosController();
             $usersController->logout();
             break;
+        case 'gestion_categorias':
+            $categoriasController->getCategoriasView();
+            break;
+        case 'borrar_categoria';
+            if(isset($_GET['id_cat'])) {
+                $categoriasController->borrarCategoria($_GET['id_cat']);
+            }
+        break;
         default:
             http_response_code(404);
             echo "Página no encontrada";

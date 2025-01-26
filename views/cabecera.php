@@ -11,7 +11,7 @@
                     <a href="?action=cuenta" class="link margin-right">Cuenta</a>
                 <?php }
                 if (isset($admin) || isset($editor)) { ?>
-                    <a href="?action=gestion_categorias.php" class="link margin-right">Categorias</a>
+                    <a href="?action=gestion_categorias" class="link margin-right">Categorias</a>
                 <?php }
                 if (isset($admin)) { ?>
                     <a href="?action=gestion_usuarios" class="link margin-right">Usuarios</a>

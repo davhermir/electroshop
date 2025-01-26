@@ -64,5 +64,17 @@ class CategoriasController
     }
     return $cats;
   }
+
+  public function borrarCategoria($id){
+    $con = conectar_db_pdo();
+    $gestor = new GestorCategorias($con);
+    $gestorArticulos = new GestorArticulos($con);
+    $articulos = $gestorArticulos->getArticulosByCategoria($id);
+    if($articulos>0){
+      header('Localhost: ?action=gestion_categorias&error_borrado=true');
+    }else{
+      $gestor->borrarCategoria($id);
+    }
+  }
 }
 ?>
