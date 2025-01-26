@@ -97,6 +97,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             $articulosController->confirm_borrar_articulos($codigoArticulo);
             break;
         case 'nuevo_articulo':
+            $categorias=$categoriasController->getCategorias();
             $articulosController = new ArticulosController();
             $error = null;
             if (isset($_GET['fileSaveError']) && $_GET['fileSaveError']) {
@@ -108,7 +109,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             } else if (isset($_GET['codigo_error']) && $_GET['codigo_error']) {
                 $error = 'codigo_error';
             }
-            $articulosController->nuevo_articulo($error);
+            $articulosController->nuevo_articulo($error,$categorias);
             break;
         case 'nuevo_articulo_check':
             $articulosController = new ArticulosController();
