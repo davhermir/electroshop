@@ -305,7 +305,7 @@ public function isNumber($number)
     public function getArticulosByCategoria($id){
         $sql = "SELECT * FROM articulos WHERE categoria = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':cadena', "$id", PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         try {
             $stmt->execute();
             return $stmt->rowCount(); 

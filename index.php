@@ -97,7 +97,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             $articulosController->confirm_borrar_articulos($codigoArticulo);
             break;
         case 'nuevo_articulo':
-            $categorias=$categoriasController->getCategoriasArticulos();
+            $categorias = $categoriasController->getCategoriasArticulos();
             $articulosController = new ArticulosController();
             $error = null;
             if (isset($_GET['fileSaveError']) && $_GET['fileSaveError']) {
@@ -109,7 +109,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             } else if (isset($_GET['codigo_error']) && $_GET['codigo_error']) {
                 $error = 'codigo_error';
             }
-            $articulosController->nuevo_articulo($error,$categorias);
+            $articulosController->nuevo_articulo($error, $categorias);
             break;
         case 'nuevo_articulo_check':
             $articulosController = new ArticulosController();
@@ -184,21 +184,42 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             $usersController->logout();
             break;
         case 'gestion_categorias':
-            $categoriasController->getCategoriasView();
+            $error = null;
+            if (isset($_GET['error_borrado'])) {
+                $error = 'error_borrado';
+            }
+            if (isset($_GET['cat_padre'])) {
+                $error = 'cat_padre';
+            }
+            $categoriasController->getCategoriasView($error);
             break;
         case 'borrar_categoria';
-            if(isset($_GET['id_cat'])) {
-                $categoriasController->borrarCategoria($_GET['id_cat']);
+            $id = null;
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+                $categoriasController->borrarCategoria($id);
+            } else {
+                header('Location: ?action=gestion_categorias');
             }
-        break;
+            break;
         case 'nueva_categoria':
             $error = null;
-            if(isset($_GET['codigo_duplicado'])) {
+            if (isset($_GET['codigo_duplicado'])) {
                 $error = true;
             }
-            $categoriasController -> nuevaCategoria($error);
+            $categoriasController->nuevaCategoria($error);
         case 'nueva_categoria_check':
-            $categoriasController -> nueva_categoria_check();
+            $categoriasController->nueva_categoria_check();
+            break;
+        case 'edicion_categoria':
+            $id = null;
+            if (isset($_GET['id_cat'])) {
+                $id = $_GET['id_cat'];
+            }
+            $categoriasController->edicion_categoria($id);
+            break;
+        case 'edicion_categoria_check':
+            $categoriasController->edicion_categoria_check();
             break;
         default:
             http_response_code(404);

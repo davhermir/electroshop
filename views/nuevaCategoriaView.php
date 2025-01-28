@@ -1,4 +1,4 @@
-<h1>Nuevo Cliente</h1>
+<h1>Nueva Categoria</h1>
 <form method="post" action="?action=nueva_categoria_check" name="f2">
     <label for="codigo">Codigo:</label> <input maxlength="11" size="11" name="codigo" id="codigo" required><br>
     <?php
@@ -12,7 +12,7 @@
 
     <label for="categoriaPadre">Categoria Padre:</label>
     <select name="categoriaPadre" id="categoriaPadre">
-        <option value=null></option>
+        <option value='null'></option>
         <?php
         foreach ($categiasPadre as $cat) { ?>
             <option value="<?= $cat->getCodigo() ?>"><?= $cat->getNombre() ?></option>

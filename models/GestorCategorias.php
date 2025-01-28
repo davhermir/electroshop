@@ -19,7 +19,7 @@ class GestorCategorias
             $stmt->bindValue(':codCategoriaPadre', $categoria->getCodpadre());
             
             if ($stmt->execute()) {
-                header("Location: listaarticulos.php");
+                header('Location: ?action=gestion_categorias');
             } else {
                 return "Ha habido un error al insertar los valores.";
             }
@@ -53,10 +53,10 @@ class GestorCategorias
     //Para buscar los datos a partir del nombre 
     public function buscarCodigo($cadena)
     {
-        $sql = "SELECT * FROM categorias WHERE codigo LIKE :cadena and activo=1";
+        $sql = "SELECT * FROM categorias WHERE codigo = :cadena and activo=1";
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(':cadena', "%$cadena%", PDO::PARAM_STR);
+            $stmt->bindValue(':cadena', "$cadena", PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $categorias = [];
@@ -86,7 +86,7 @@ class GestorCategorias
             $stmt->bindValue(':codCategoriaPadre', $categoria->getCodpadre());
 
             if ($stmt->execute()) {
-                header("Location: listaarticulos.php");
+                header("Location: ?action=gestion_categorias");
             } else {
                 echo "No se pudieron actualizar los datos.";
             }
@@ -134,6 +134,19 @@ class GestorCategorias
         } catch (PDOException $e) {
             echo "Ha habido un error al actualizar los valores: " . $e->getMessage();
         }
+    }
+
+    public function getCategoriasByidPadre($codigo){
+        $sql = "SELECT * FROM categorias WHERE codCategoriaPadre LIKE :codigo and activo=1";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':codigo', "$codigo", PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            return "Error en la búsqueda: " . $e->getMessage();
+        }
+
     }
 
 
