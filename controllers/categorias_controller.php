@@ -22,6 +22,12 @@ class CategoriasController
     $con = conectar_db_pdo();
     $gestor = new GestorCategorias($con);
     $categorias = $gestor->getCategorias();
+    return $categorias;
+  }
+
+  public function getCategoriasArticulos()
+  {
+    $categorias = $this->getCategorias();
     $menu = $this->getCategoriasHijas($categorias);
     return $menu;
   }
@@ -65,16 +71,59 @@ class CategoriasController
     return $cats;
   }
 
-  public function borrarCategoria($id){
+  public function getCategoriasPadre($categorias)
+  {
+    $cats = [];
+    foreach ($categorias as $item) {
+      if ($item->getCodpadre() == null) {
+        $cats[] = $item;
+      }
+    }
+    return $cats;
+  }
+
+  public function borrarCategoria($id)
+  {
     $con = conectar_db_pdo();
     $gestor = new GestorCategorias($con);
     $gestorArticulos = new GestorArticulos($con);
     $articulos = $gestorArticulos->getArticulosByCategoria($id);
-    if($articulos>0){
+    if ($articulos > 0) {
       header('Localhost: ?action=gestion_categorias&error_borrado=true');
-    }else{
+    } else {
       $gestor->borrarCategoria($id);
     }
   }
+
+  public function nuevaCategoria($error)
+  {
+    $codigo_duplicado = $error;
+    $categorias = $this->getCategorias();
+    $categiasPadre = $this->getCategoriasPadre($categorias);
+    require VIEWS_PATH . '/nuevaCategoriaView.php';
+  }
+
+  public function nueva_categoria_check()
+  {
+    $con = conectar_db_pdo();
+    $gestor = new GestorCategorias($con);
+
+    if (isset($_POST['codigo'])) {
+      $codigo = $_POST['codigo'];
+      $result = $gestor->buscarCodigo($codigo);
+      if (count($result) > 0) {
+        header('Location: ?action=nueva_categoria&codigo_duplicado=true');
+      }
+      $categoria = new Categoria(
+        $_POST['codigo'],
+        $_POST['nombre'],
+        1,
+        $_POST['categoriaPadre'],
+      );
+      $gestor->insertar($categoria);
+      header('Location: ?action=gestion_categorias');
+    }
+  }
 }
+
 ?>

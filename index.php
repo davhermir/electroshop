@@ -97,7 +97,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             $articulosController->confirm_borrar_articulos($codigoArticulo);
             break;
         case 'nuevo_articulo':
-            $categorias=$categoriasController->getCategorias();
+            $categorias=$categoriasController->getCategoriasArticulos();
             $articulosController = new ArticulosController();
             $error = null;
             if (isset($_GET['fileSaveError']) && $_GET['fileSaveError']) {
@@ -191,6 +191,15 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
                 $categoriasController->borrarCategoria($_GET['id_cat']);
             }
         break;
+        case 'nueva_categoria':
+            $error = null;
+            if(isset($_GET['codigo_duplicado'])) {
+                $error = true;
+            }
+            $categoriasController -> nuevaCategoria($error);
+        case 'nueva_categoria_check':
+            $categoriasController -> nueva_categoria_check();
+            break;
         default:
             http_response_code(404);
             echo "Página no encontrada";
