@@ -115,14 +115,29 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             $articulosController = new ArticulosController();
             $articulosController->nuevo_articulo_check();
             break;
-        /*
-    case 'editar_articulo':
-        if (isset($_GET['codigo'])) {
-            $codigoArticulo = $_GET['codigo'];
-        }
-        //$controller->editar_articulos($codigoArticulo);
-        break;
-        */
+        case 'editar_articulo':
+            $categorias = $categoriasController->getCategoriasArticulos();
+            $articulosController = new ArticulosController();
+            $error = null;
+            $codigoArticulo=null;
+            if (isset($_GET['fileSaveError']) && $_GET['fileSaveError']) {
+                $error = 'fileSaveError';
+            } else if (isset($_GET['fileError']) && $_GET['fileError']) {
+                $error = 'fileError';
+            } else if (isset($_GET['emptyFieldsError']) && $_GET['emptyFieldsError']) {
+                $error = 'emptyFieldsError';
+            }
+            if (isset($_GET['id'])) {
+                $codigoArticulo = $_GET['id'];
+            }else{
+                header('Location: ?action=mostrar_articulos');
+            }
+            $articulosController->editar_articulo($codigoArticulo,$categorias,$error);
+            break;
+        case 'editar_articulo_check':
+            $articulosController = new ArticulosController();
+            $articulosController->editar_articulo_check();
+            break;
         case 'check_login':
             if (isset($_POST['correo']) && isset($_POST['key'])) {
                 $usu = $_POST['correo'];

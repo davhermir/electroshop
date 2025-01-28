@@ -13,12 +13,12 @@
             <a href="?action=mostrar_articulos&order=asc"><button>ASC</button></a>
             <a href="?action=mostrar_articulos&order=desc"><button>DESC</button></a>
         </div>
-        <?php /* if ($_SESSION['admin'] || $_SESSION['editor']) { ?>*/?>
+        <?php  if (isset($_SESSION['rol']) && $_SESSION['rol']=='admin' || $_SESSION['rol']=='editor') { ?>
             <div class="centrar-elemento">
                 <a href="?action=nuevo_articulo"><button>Nuevo Articulo</button></a>
             </div>
 
-        <?php  /*} */?>
+        <?php  } ?>
     </div>
         <section class="articulos">
             <?php
@@ -41,7 +41,9 @@
                             <?php echo '-' . htmlspecialchars($articulo->getDescuento()) . '%' ?>
                             </div>
                             </div>
-                        <?php } ?>
+                        <?php } if (isset($_SESSION['rol']) && $_SESSION['rol']=='admin' || $_SESSION['rol']=='editor') { 
+                            echo '<td><a href="?action=editar_articulo&id=' . $articulo->getCodigo() . '"><i class="bi bi-pencil"></i></a></td>'; 
+                         } ?>
                     </div>
                 </article>
             <?php } 

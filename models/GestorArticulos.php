@@ -201,7 +201,7 @@ public function isNumber($number)
     public function modificar(Articulo $articulo)
     {
         $sql = "UPDATE articulos SET nombre=:nombre ,  descripcion = :descripcion , categoria=:categoria, precio=:precio,
-        imagen = :imagen  WHERE codigo = :codigo";
+        imagen = :imagen, descuento=:descuento,activo=:activo   WHERE codigo = :codigo";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':nombre', $articulo->getNombre());
@@ -209,12 +209,12 @@ public function isNumber($number)
             $stmt->bindValue(':categoria', $articulo->getCategoria());
             $stmt->bindValue(':precio', $articulo->getPrecio());
             $stmt->bindValue(':imagen', $articulo->getImagen());
-            $stmt->bindValue(':codigo', $articulo->getCodigo());
             $stmt->bindValue(':descuento', $articulo->getDescuento());
             $stmt->bindValue(':activo', $articulo->getActivo());
-
+            $stmt->bindValue(':codigo', $articulo->getCodigo());
+            
             if ($stmt->execute()) {
-                header("Location: ?action=listaArticulosView");
+                header("Location: ?action=mostrar_articulos");
             } else {
                 echo "No se pudieron actualizar los datos.";
             }

@@ -67,6 +67,7 @@ footer{
 }
 .foot{
     /*background-color: #333;*/
+    height: 20vh;
     border-top: 1px solid rgb(66, 241, 66);
     padding-top: 10px;
     text-align: center;
@@ -84,7 +85,7 @@ footer{
 .content{
     width:65%;
     padding: 1%;
-    height: 100vh;
+    padding-bottom: 20vh;
 }
 
 article {
