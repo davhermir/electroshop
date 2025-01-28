@@ -1,3 +1,4 @@
+<h3>Gestión Categorías</h3>
 <a href="?action=nueva_categoria"><button>Nueva Categoría</button></a>
 <?php
         foreach ($menu as $categoriaPadre) {
