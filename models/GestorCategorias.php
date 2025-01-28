@@ -27,7 +27,6 @@ class GestorCategorias
             echo "Error al insertar los valores: " . $e->getMessage();
         }
     }
-    //Para mostrar los datos de los usuarios 
     public function getCategorias()
     {
         $sql = "SELECT * FROM categorias where activo=1 ORDER BY codCategoriaPadre DESC";
@@ -50,10 +49,32 @@ class GestorCategorias
         }
     }
 
-    //Para buscar los datos a partir del nombre 
+    public function getCategoriasAdmin()
+    {
+        $sql = "SELECT * FROM categorias ORDER BY codCategoriaPadre DESC";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $categorias = [];
+            foreach ($result as $row) {
+                $categorias[] = new Categoria(
+                    $row['codigo'],
+                    $row['nombre'],
+                    $row['activo'],
+                    $row['codCategoriaPadre']
+                );
+            }
+            return $categorias;
+        } catch (PDOException $e) {
+            echo "Error en la consulta: " . $e->getMessage();
+        }
+    }
+
+    //Para buscar los datos a partir del codigo 
     public function buscarCodigo($cadena)
     {
-        $sql = "SELECT * FROM categorias WHERE codigo = :cadena and activo=1";
+        $sql = "SELECT * FROM categorias WHERE codigo = :cadena";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':cadena', "$cadena", PDO::PARAM_STR);

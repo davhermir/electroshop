@@ -46,7 +46,8 @@ class CategoriasController
     }
     $con = conectar_db_pdo();
     $gestor = new GestorCategorias($con);
-    $categorias = $gestor->getCategorias();
+    $categorias = $gestor->getCategoriasAdmin();
+    $totalCategorias = count($categorias);
     $menu = $this->orderCategorias($categorias);
     require VIEWS_PATH . '/gestionCategoriasView.php';
   }
@@ -159,7 +160,7 @@ class CategoriasController
         $categoria = new Categoria(
           $_POST['codigo'],
           $_POST['nombre'],
-          1,
+          $_POST['activo'],
           $categoriaPadre
         );
         $gestor->modificar($categoria);

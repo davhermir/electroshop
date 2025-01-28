@@ -19,6 +19,16 @@
         <?php }} ?>
     </select>
     <br><br>
+    <label for="activo">Activo</label>
+    <select name="activo" id="activo" required>
+        <?php
+        $selectedTrue = $categoria->getActivo()==1?'selected':'';
+        $selectedFalse = $categoria->getActivo()==0?'selected':'';
+        ?>
+        <option value=1 <?= $selectedTrue ?>>Activo</option>
+        <option value=0 <?= $selectedFalse ?>>Inactivo</option>
+    </select>
+    <br><br>
 
     <input name="Borrar" value="Vaciar campos" type="reset">&nbsp;&nbsp;&nbsp;
     <input name="Enviar" value="Enviar datos" type="submit"><br>
