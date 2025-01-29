@@ -1,5 +1,5 @@
 <?php
-class GestorCategorias
+class GestorCarrito
 {
     private $db;
     //Constructor base datos 

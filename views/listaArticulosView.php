@@ -12,13 +12,11 @@ if (isset($codigoArticulo)) {
         Orden:
         <a href="?action=mostrar_articulos&order=asc"><button class="btn btn-success">ASC</button></a>
         <a href="?action=mostrar_articulos&order=desc"><button class="btn btn-success">DESC</button></a>
-    </div>
-    <?php if (isset($_SESSION['rol']) && ($_SESSION['rol'] == 'admin' || $_SESSION['rol'] == 'editor')) { ?>
-        <div class="centrar-elemento">
-            <a href="?action=nuevo_articulo"><button>Nuevo Articulo</button></a>
-        </div>
 
-    <?php } ?>
+        <?php if (isset($_SESSION['rol']) && ($_SESSION['rol'] == 'admin' || $_SESSION['rol'] == 'editor')) { ?>
+            <a href="?action=nuevo_articulo"><button class="btn btn-success">Nuevo Articulo</button></a>
+        <?php } ?>
+    </div>
 </div>
 <section>
     <div class="container px-4 px-lg-5 mt-5">
@@ -29,12 +27,14 @@ if (isset($codigoArticulo)) {
                     <!--<article class="articulo">-->
                     <div class="col mb-5">
                         <div class="card">
+                        <?php if($articulo->getDescuento()&&$articulo->getDescuento()>0){ ?>
                             <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                <?php echo '-' . htmlspecialchars($articulo->getDescuento()) . '%' ?>
+                                <?php echo '-' . htmlspecialchars($articulo->getDescuento()) . '%'; ?>
                             </div>
+                            <?php } ?>
                             <?php if (isset($_SESSION['rol']) && ($_SESSION['rol'] == 'admin' || $_SESSION['rol'] == 'editor')) { ?>
                                 <div class="badge bg-light text-white position-absolute top-0 start-0">
-                                    <a href="?action=editar_articulo&id=' . $articulo->getCodigo() . '"><i
+                                    <a href="?action=editar_articulo&id=<?= $articulo->getCodigo() ?>"><i
                                             class="bi bi-pencil"></i></a>
                                 </div>
                             <?php } ?>
@@ -58,8 +58,12 @@ if (isset($codigoArticulo)) {
                                 </div>
                             </div>
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-success mt-auto" href="#">Añadir al
-                                        carrito</a>
+                                <div class="text-center">
+                                    <form method='POST' action="?action=add_carrito">
+                                        <input type='hidden' name='id_producto' value=<?=$articulo->getCodigo()?>>
+                                        <input type='number' name='cantidad' value='1' min='1' style='width: 50px;' required>
+                                        <button type='submit' class="btn btn-success">Añadir</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

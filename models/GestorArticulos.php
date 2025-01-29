@@ -133,12 +133,12 @@ class GestorArticulos
     }
 
     //Para buscar los datos a partir del nombre 
-    public function buscarCodigo($cadena)
+    public function buscarCodigo($codigo): array|string
     {
-        $sql = "SELECT * FROM articulos WHERE codigo LIKE :cadena";
+        $sql = "SELECT * FROM articulos WHERE codigo LIKE :codigo";
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(':cadena', "%$cadena%", PDO::PARAM_STR);
+            $stmt->bindValue(':codigo', "$codigo");
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $articulos = [];

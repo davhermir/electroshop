@@ -3,7 +3,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/config/conectar_db.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/models/Articulo.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/models/GestorArticulos.php');
 
-//include 'config/seguridad.php';
 
 class ArticulosController
 {

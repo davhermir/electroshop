@@ -4,7 +4,6 @@ ob_start();
 define('VIEWS_PATH', __DIR__ . '/views');
 define('IMG_PATH', __DIR__ . '/images');
 //$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-//var_dump($_GET);
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,6 +12,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/articulos_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/header_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/categorias_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -235,6 +235,10 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             break;
         case 'edicion_categoria_check':
             $categoriasController->edicion_categoria_check();
+            break;
+        case 'add_carrito':
+                $carritoController = new CarritoController();
+                $carritoController->add();
             break;
         default:
             http_response_code(404);

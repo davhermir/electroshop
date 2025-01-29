@@ -17,4 +17,7 @@
             echo "*Contrseña cambiada correctamente";
         }
         ?>
+        <a href="?action=mostrar_carrito" style="text-decoration: none; font-size: 20px;">
+    🛒  (<?php echo isset($_SESSION['carrito']) ? count($_SESSION['carrito']) : 0; ?>)
+</a>
 </div>
