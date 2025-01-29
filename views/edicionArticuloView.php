@@ -45,7 +45,7 @@
         ?>
         <option value=1 <?= $selectedTrue ?>>Activo</option>
         <option value=0 <?= $selectedFalse ?>>Inactivo</option>
-    </select>
+    </select><br><br>
         <input name="Borrar" value="Vaciar campos" type="reset">&nbsp;&nbsp;&nbsp;
         <input name="Enviar" value="Enviar datos" type="submit"><br>
     </form>

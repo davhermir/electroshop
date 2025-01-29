@@ -12,7 +12,6 @@
                 <?php }
                 if (isset($admin) || isset($editor)) { ?>
                     <a href="?action=gestion_categorias" class="link margin-right">Categorias</a>
-                    <a href="?action=gestion_articulos" class="link margin-right">Articulos</a>
                 <?php }
                 if (isset($admin)) { ?>
                     <a href="?action=gestion_usuarios" class="link margin-right">Usuarios</a>
