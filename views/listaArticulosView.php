@@ -32,6 +32,12 @@ if (isset($codigoArticulo)) {
                             <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
                                 <?php echo '-' . htmlspecialchars($articulo->getDescuento()) . '%' ?>
                             </div>
+                            <?php if (isset($_SESSION['rol']) && ($_SESSION['rol'] == 'admin' || $_SESSION['rol'] == 'editor')) { ?>
+                                <div class="badge bg-light text-white position-absolute top-0 start-0">
+                                    <a href="?action=editar_articulo&id=' . $articulo->getCodigo() . '"><i
+                                            class="bi bi-pencil"></i></a>
+                                </div>
+                            <?php } ?>
                             <img class="card-img-top" src="images/<?php echo htmlspecialchars($articulo->getImagen()) ?>"
                                 alt="Imagen del artículo">
                             <div class="card-body p-4">
@@ -48,14 +54,12 @@ if (isset($codigoArticulo)) {
                                                 <?php echo htmlspecialchars($articulo->calcularPrecioOferta() . '€') ?>
                                             </div>
                                         </div>
-                                    <?php }
-                                    if (isset($_SESSION['rol']) && ($_SESSION['rol'] == 'admin' || $_SESSION['rol'] == 'editor')) {
-                                        echo '<td><a href="?action=editar_articulo&id=' . $articulo->getCodigo() . '"><i class="bi bi-pencil"></i></a></td>';
-                                    } ?>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-success mt-auto" href="#">Añadir al carrito</a>
+                                <div class="text-center"><a class="btn btn-outline-success mt-auto" href="#">Añadir al
+                                        carrito</a>
                                 </div>
                             </div>
                         </div>
