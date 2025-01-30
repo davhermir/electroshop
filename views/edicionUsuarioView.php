@@ -2,7 +2,7 @@
 $selectOptions=['admin','editor','usuario'];
 ?>
 <h3>Cambiar Datos Usuario</h3>
-<form method="post" action="?action=update_usuario">
+<form method="post" action="?action=gestion_user_update">
     <label for="dni">DNI:</label>
     <input maxlength="9" size="9" name="dni" id="dni" readonly
         value="<?= htmlspecialchars($usuario->getDni()) ?>"><br><br>

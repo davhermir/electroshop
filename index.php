@@ -257,6 +257,9 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
             }
             $usersController->gestion_user($dni);
                 break;
+            case 'gestion_user_update':
+                $usersController->gestion_user_update();
+                break;
         default:
             http_response_code(404);
             echo "Página no encontrada";

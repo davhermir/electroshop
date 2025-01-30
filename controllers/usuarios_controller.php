@@ -253,10 +253,11 @@ class UsuariosController
   }
 
   public function gestion_usuarios($pag,$ini){
+    $dni = $_SESSION['dni'];
     $con = conectar_db_pdo();
     $gestor = new GestorUsuarios($con);
-    $users=$gestor->getUsers($ini,$pag);
-    $num_total_registros = $gestor->countTotalUsuarios();
+    $users=$gestor->getUsers($ini,$pag,$dni);
+    $num_total_registros = $gestor->countTotalUsuarios()-1;
     $total_paginas = ceil($num_total_registros / 10);
     require VIEWS_PATH . '/gestionUsuariosView.php';
   }
@@ -266,6 +267,18 @@ class UsuariosController
     $gestor = new GestorUsuarios($con);
     $usuario = $gestor->buscarDni($dni)[0];
     require VIEWS_PATH . '/edicionUsuarioView.php';
+  }
+
+  public function gestion_user_update(){
+    $con = conectar_db_pdo();
+    $gestor = new GestorUsuarios($con);
+
+    if (isset($_POST['dni'])) {
+      $dni = $_POST['dni'];
+      $activo = $_POST['activo'];
+      $rol = $_POST['rol'];
+      $gestor->updateUserGestion($dni,$activo,$rol);
+    }
   }
 }
 ?>

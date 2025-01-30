@@ -12,7 +12,7 @@
     <tbody class="table-group-divider">
         <?php
         foreach ($users as $user) {
-            if($user->getDni() !=$_SESSION['dni']){
+            if($user->getDni() != $_SESSION['dni']){
             echo '<tr>';
             $activo = $user->getActivo() == 1 ? '<i class="bi bi-check"></i>' : '<i class="bi bi-x"></i>';
             echo '<td>' . $user->getDni() . '</td>';
