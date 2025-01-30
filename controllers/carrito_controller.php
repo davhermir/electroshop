@@ -36,14 +36,36 @@ class CarritoController
           $_SESSION['carrito'][] = [
             'id' => $producto->getCodigo(),
             'nombre' => $producto->getNombre(),
-            'precio' => $producto->getPrecio(),
+            'precio' => $producto->calcularPrecioOferta(),
             'descuento' => $producto->getDescuento(),
-            'cantidad' => $cantidad
+            'cantidad' => $cantidad,
+            'img' => $producto->getImagen()
           ];
         }
       }
     }
     header('Location: ?action=mostrar_articulos');
+  }
+
+  public function mostrar_carrito(){
+    $carrito = null;
+    if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
+      $carrito= $_SESSION['carrito'];
+      require VIEWS_PATH . '/mostrarCarritoView.php';
+    }else{
+      header('Location: ?action=mostrar_articulos');
+    }
+  }
+
+  public function eliminar_carrito(){
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['index'])) {
+      $index = $_POST['index'];
+      if (isset($_SESSION['carrito'][$index])) {
+          unset($_SESSION['carrito'][$index]);
+          $_SESSION['carrito'] = array_values($_SESSION['carrito']);
+      }
+  }
+  header('Location: ?action=mostrar_carrito');
   }
 }
 ?>

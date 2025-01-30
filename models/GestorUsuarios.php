@@ -280,7 +280,7 @@ class GestorUsuarios
     public function login($usu, $pwd)
     {
         try {
-            $sql = "select * from usuarios where email=:email";
+            $sql = "select * from usuarios where email=:email and activo=1";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':email', $usu, PDO::PARAM_STR);
             $stmt->execute();

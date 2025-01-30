@@ -37,7 +37,7 @@
             ?>
         </p><br><br>
         <label for="descuento">Descuento:</label>
-        <input type="number" name="descuento" id="descuento" required><br><br>
+        <input type="number" name="descuento" id="descuento"><br><br>
         <input name="Borrar" value="Vaciar campos" type="reset">&nbsp;&nbsp;&nbsp;
         <input name="Enviar" value="Enviar datos" type="submit"><br>
     </form>

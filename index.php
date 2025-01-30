@@ -63,6 +63,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
     switch ($action) {
         case 'mostrar_articulos':
             $articulosController = new ArticulosController();
+            $pags = 8;
             if (isset($_GET["pagina"])) {
                 $pagina = $_GET["pagina"];
                 $inicio = ($pagina - 1) * $pags;
@@ -259,6 +260,14 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
                 break;
             case 'gestion_user_update':
                 $usersController->gestion_user_update();
+                break;
+            case 'mostrar_carrito':
+                $carritoController = new CarritoController();
+                $carritoController->mostrar_carrito();
+                break;
+            case'eliminar_carrito':
+                $carritoController = new CarritoController();
+                $carritoController->eliminar_carrito();
                 break;
         default:
             http_response_code(404);

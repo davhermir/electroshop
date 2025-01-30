@@ -1,4 +1,3 @@
-<h1>Artículos</h1>
 <?php
 if (isset($codigoArticulo)) {
     echo "*Artículo con codigo " . $codigoArticulo . " eliminado";
@@ -7,17 +6,6 @@ if (isset($codigoArticulo)) {
 }
 ?>
 
-<div class="flexmenu space">
-    <div class="centrar-elemento flexmenu">
-        Orden:        
-        <a href="?action=mostrar_articulos&order=asc<?= isset($cat) ? '&cat='.$cat : ''; ?>"><button class="btn btn-success">ASC</button></a>
-        <a href="?action=mostrar_articulos&order=desc<?= isset($cat) ? '&cat='.$cat : ''; ?>"><button class="btn btn-success">DESC</button></a>
-
-        <?php if (isset($_SESSION['rol']) && ($_SESSION['rol'] == 'admin' || $_SESSION['rol'] == 'editor')) { ?>
-            <a href="?action=nuevo_articulo"><button class="btn btn-success">Nuevo Articulo</button></a>
-        <?php } ?>
-    </div>
-</div>
 <section>
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
@@ -94,4 +82,15 @@ if (isset($codigoArticulo)) {
     }
     echo "  | Paginas:" . $total_paginas . "  | Total elementos: " . $num_total_registros;
     ?>
+</div>
+<div class="flexmenu space text-center">
+    <div class="centrar-elemento flexmenu">
+        Orden:        
+        <a href="?action=mostrar_articulos&order=asc<?= isset($cat) ? '&cat='.$cat : ''; ?>"><button class="btn btn-success">ASC</button></a>
+        <a href="?action=mostrar_articulos&order=desc<?= isset($cat) ? '&cat='.$cat : ''; ?>"><button class="btn btn-success">DESC</button></a>
+
+        <?php if (isset($_SESSION['rol']) && ($_SESSION['rol'] == 'admin' || $_SESSION['rol'] == 'editor')) { ?>
+            <a href="?action=nuevo_articulo"><button class="btn btn-success">Nuevo Articulo</button></a>
+        <?php } ?>
+    </div>
 </div>

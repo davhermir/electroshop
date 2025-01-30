@@ -23,18 +23,20 @@
             echo '</tr>';
             }
         }
-        $total_paginas;
-        $num_total_registros;
-        if ($total_paginas > 1) {
-            for ($i = 1; $i <= $total_paginas; $i++) {
-                if ($pagina == $i) {
-                    echo $pagina . " ";
-                } else {
-                    echo "<a href='/?action=gestion_usuarios&pagina=" . $i . "'>" . $i . "</a>  ";
-                }
-            }
-        }
-        echo "  | Paginas:" . $total_paginas . "  | Total elementos: " . $num_total_registros;
         ?>
     </tbody>
 </table>
+<?php
+$total_paginas;
+$num_total_registros;
+if ($total_paginas > 1) {
+    for ($i = 1; $i <= $total_paginas; $i++) {
+        if ($pagina == $i) {
+            echo $pagina . " ";
+        } else {
+            echo "<a href='/?action=gestion_usuarios&pagina=" . $i . "'>" . $i . "</a>  ";
+        }
+    }
+}
+echo "  | Paginas:" . $total_paginas . "  | Total elementos: " . $num_total_registros;
+?>
