@@ -3,12 +3,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/config/conectar_db.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/models/Articulo.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/models/GestorArticulos.php');
 
-//include 'config/seguridad.php';
 
 class ArticulosController
 {
 
-  public function listarArticulos($pagina,$pags, $ini, $asc, $codigo,$cat)
+  public function listarArticulos($pagina, $pags, $ini, $asc, $codigo, $cat)
   {
     $con = conectar_db_pdo();
     $gestor = new GestorArticulos($con);
@@ -17,22 +16,22 @@ class ArticulosController
     $codigoArticulo = $codigo;
     $res = [];
     if ($asc == "asc") {
-      $res = $gestor->mostrarAsc(false, $ini, $pags,$cat);
+      $res = $gestor->mostrarAsc(false, $ini, $pags, $cat);
     } else {
-      $res = $gestor->mostrarAsc(true, $ini, $pags,$cat);
+      $res = $gestor->mostrarAsc(true, $ini, $pags, $cat);
     }
-   
+
     require VIEWS_PATH . '/listaArticulosView.php';
   }
 
-  public function buscarArticulos($pagina,$pags, $ini, $nombre)
+  public function buscarArticulos($pagina, $pags, $ini, $nombre)
   {
     $con = conectar_db_pdo();
     $gestor = new GestorArticulos($con);
     $num_total_registros = $gestor->countTotalArticulosNombre($nombre);
     $total_paginas = ceil($num_total_registros / $pags);
     $res = $gestor->buscar($nombre, $ini, $pags);
-   
+
     require VIEWS_PATH . '/listaArticulosView.php';
   }
 
@@ -56,16 +55,16 @@ class ArticulosController
     } else {
       require VIEWS_PATH . '/listaArticulosView.php';
     }
-   
+
   }
 
-  public function nuevo_articulo($error,$categorias)
+  public function nuevo_articulo($error, $categorias)
   {
-    $fileSaveError=null;
-    $fileError=null;
-    $emptyFieldsError=null;
-    $codigo_duplicado=null;
-    $codigo_error=null;
+    $fileSaveError = null;
+    $fileError = null;
+    $emptyFieldsError = null;
+    $codigo_duplicado = null;
+    $codigo_error = null;
     if ($error) {
       switch ($error) {
         case 'fileSaveError':
@@ -85,7 +84,7 @@ class ArticulosController
           break;
       }
     }
-   
+
     require VIEWS_PATH . '/nuevoArticuloView.php';
   }
   public function nuevo_articulo_check()
@@ -96,8 +95,8 @@ class ArticulosController
       if (isset($_POST['codigo'])) {
         if (
           isset($_FILES['img']) && $_FILES['img']['size'] > 0 && isset($_POST['codigo']) && isset($_POST['nombre'])
-          && isset($_POST['descripcion']) && isset($_POST['categoria']) && isset($_POST['precio']) && isset($_POST['descuento']))
-         {
+          && isset($_POST['descripcion']) && isset($_POST['categoria']) && isset($_POST['precio']) && isset($_POST['descuento'])
+        ) {
           $nombretemporal = $_FILES['img']['tmp_name'];
           $nombre_archivo = $_FILES['img']['name'];
           $ruta = IMG_PATH . '/' . $nombre_archivo;
@@ -119,7 +118,7 @@ class ArticulosController
                     $nombre_archivo,
                     $_POST['descuento'],
                     1
-                    
+
                   );
                   $gestor->insertar($articulo);
                 }
@@ -138,10 +137,91 @@ class ArticulosController
 
       }
     }
-   
-  }
-  /*public function editar_articulo($codigoArticulo) {
 
-  }*/
+  }
+  public function editar_articulo($codigoArticulo,$categorias, $error)
+  {
+    $con = conectar_db_pdo();
+    $gestor = new GestorArticulos($con);
+    $emptyFieldsError = null;
+    $fileError = null;
+    $fileSaveError = null;
+    switch ($error) {
+      case "emptyFieldsError":
+        $emptyFieldsError = true;
+        break;
+      case "fileError":
+        $fileError = true;
+        break;
+      case "fileSaveError":
+        $fileSaveError = true;
+        break;
+    }
+    $data = $gestor->buscarCodigo($codigoArticulo);
+    if (count($data) > 0) {
+      $articulo = $data[0];
+    } else {
+      header('Location: action=mostrar_articulos');
+    }
+    require VIEWS_PATH . '/edicionArticuloView.php';
+  }
+
+  public function editar_articulo_check()
+  {
+    $con = conectar_db_pdo();
+    $gestor = new GestorArticulos($con);
+    if (isset($_POST['codigo'])) {
+      $codigo = $_POST['codigo'];
+      $articulo = "";
+      if (isset($_POST['codigo']) && isset($_POST['nombre'])
+      && isset($_POST['descripcion']) && isset($_POST['categoria']) && isset($_POST['precio']) && isset($_POST['descuento'])
+      ) {
+
+        $mismaImagen = true;
+        if (isset($_FILES['img']) && $_FILES['img']['size'] > 0) {
+          $nombretemporal = $_FILES['img']['tmp_name'];
+          $nombre_archivo = $_FILES['img']['name'];
+          $mismaImagen = $_POST['imagenAnterior'] == $nombre_archivo;
+        }
+        if ($mismaImagen) {
+          $articulo = new Articulo(
+            $_POST['codigo'],
+            $_POST['nombre'],
+            $_POST['descripcion'],
+            $_POST['categoria'],
+            $_POST['precio'],
+            $_POST['imagenAnterior'],
+            $_POST['descuento'],
+            $_POST['activo'],
+          );
+        } else {
+          $ruta = "Images/" . $nombre_archivo;
+          list($ancho, $alto, $tipos, $atributos) = getimagesize($nombretemporal);
+          if ($_FILES['img']['size'] <= 3000000 && $ancho && $ancho <= 200 && $alto <= 200) {
+            if (move_uploaded_file($nombretemporal, $ruta)) {
+              $articulo = new Articulo(
+                $_POST['codigo'],
+                $_POST['nombre'],
+                $_POST['descripcion'],
+                $_POST['categoria'],
+                $_POST['precio'],
+                $nombre_archivo,
+                $_POST['descuento'],
+                $_POST['activo'],
+              );
+            } else {
+              header("Location: ?action=editar_articulo&id=$codigo&fileSaveError=true");
+            }
+          } else {
+            header("Location: ?action=editar_articulo&id=$codigo&fileError=true");
+          }
+        }
+
+        $gestor->modificar($articulo);
+      } else {
+        header("Location: ?action=editar_articulo&id=$codigo&emptyFieldsError=true");
+      }
+    }
+  }
 }
 ?>

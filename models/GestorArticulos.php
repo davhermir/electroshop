@@ -133,12 +133,12 @@ class GestorArticulos
     }
 
     //Para buscar los datos a partir del nombre 
-    public function buscarCodigo($cadena)
+    public function buscarCodigo($codigo): array|string
     {
-        $sql = "SELECT * FROM articulos WHERE codigo LIKE :cadena";
+        $sql = "SELECT * FROM articulos WHERE codigo LIKE :codigo";
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(':cadena', "%$cadena%", PDO::PARAM_STR);
+            $stmt->bindValue(':codigo', "$codigo");
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $articulos = [];
@@ -201,7 +201,7 @@ public function isNumber($number)
     public function modificar(Articulo $articulo)
     {
         $sql = "UPDATE articulos SET nombre=:nombre ,  descripcion = :descripcion , categoria=:categoria, precio=:precio,
-        imagen = :imagen  WHERE codigo = :codigo";
+        imagen = :imagen, descuento=:descuento,activo=:activo   WHERE codigo = :codigo";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':nombre', $articulo->getNombre());
@@ -209,12 +209,12 @@ public function isNumber($number)
             $stmt->bindValue(':categoria', $articulo->getCategoria());
             $stmt->bindValue(':precio', $articulo->getPrecio());
             $stmt->bindValue(':imagen', $articulo->getImagen());
-            $stmt->bindValue(':codigo', $articulo->getCodigo());
             $stmt->bindValue(':descuento', $articulo->getDescuento());
             $stmt->bindValue(':activo', $articulo->getActivo());
-
+            $stmt->bindValue(':codigo', $articulo->getCodigo());
+            
             if ($stmt->execute()) {
-                header("Location: ?action=listaArticulosView");
+                header("Location: ?action=mostrar_articulos");
             } else {
                 echo "No se pudieron actualizar los datos.";
             }
@@ -305,7 +305,7 @@ public function isNumber($number)
     public function getArticulosByCategoria($id){
         $sql = "SELECT * FROM articulos WHERE categoria = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':cadena', "$id", PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         try {
             $stmt->execute();
             return $stmt->rowCount(); 

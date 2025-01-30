@@ -62,6 +62,7 @@ class UsuariosController
   {
     $dni_duplicado = null;
     $dni_error = null;
+    $correo_duplicado = null;
     if ($error) {
       switch ($error) {
         case 'dni_duplicado':
@@ -70,6 +71,9 @@ class UsuariosController
         case 'dni_error':
           $dni_error = true;
           break;
+          case 'correo_duplicado':
+            $correo_duplicado = true;
+            break;
       }
     }
 
@@ -246,6 +250,22 @@ class UsuariosController
         header('Location: ?action=menu&correo_duplicado=true');
       }
     }
+  }
+
+  public function gestion_usuarios($pag,$ini){
+    $con = conectar_db_pdo();
+    $gestor = new GestorUsuarios($con);
+    $users=$gestor->getUsers($ini,$pag);
+    $num_total_registros = $gestor->countTotalUsuarios();
+    $total_paginas = ceil($num_total_registros / 10);
+    require VIEWS_PATH . '/gestionUsuariosView.php';
+  }
+
+  public function gestion_user($dni){
+    $con = conectar_db_pdo();
+    $gestor = new GestorUsuarios($con);
+    $usuario = $gestor->buscarDni($dni)[0];
+    require VIEWS_PATH . '/edicionUsuarioView.php';
   }
 }
 ?>

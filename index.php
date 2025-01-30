@@ -4,7 +4,6 @@ ob_start();
 define('VIEWS_PATH', __DIR__ . '/views');
 define('IMG_PATH', __DIR__ . '/images');
 //$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-//var_dump($_GET);
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,6 +12,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/articulos_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/header_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/categorias_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -97,7 +97,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             $articulosController->confirm_borrar_articulos($codigoArticulo);
             break;
         case 'nuevo_articulo':
-            $categorias=$categoriasController->getCategoriasArticulos();
+            $categorias = $categoriasController->getCategoriasArticulos();
             $articulosController = new ArticulosController();
             $error = null;
             if (isset($_GET['fileSaveError']) && $_GET['fileSaveError']) {
@@ -109,20 +109,35 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             } else if (isset($_GET['codigo_error']) && $_GET['codigo_error']) {
                 $error = 'codigo_error';
             }
-            $articulosController->nuevo_articulo($error,$categorias);
+            $articulosController->nuevo_articulo($error, $categorias);
             break;
         case 'nuevo_articulo_check':
             $articulosController = new ArticulosController();
             $articulosController->nuevo_articulo_check();
             break;
-        /*
-    case 'editar_articulo':
-        if (isset($_GET['codigo'])) {
-            $codigoArticulo = $_GET['codigo'];
-        }
-        //$controller->editar_articulos($codigoArticulo);
-        break;
-        */
+        case 'editar_articulo':
+            $categorias = $categoriasController->getCategoriasArticulos();
+            $articulosController = new ArticulosController();
+            $error = null;
+            $codigoArticulo=null;
+            if (isset($_GET['fileSaveError']) && $_GET['fileSaveError']) {
+                $error = 'fileSaveError';
+            } else if (isset($_GET['fileError']) && $_GET['fileError']) {
+                $error = 'fileError';
+            } else if (isset($_GET['emptyFieldsError']) && $_GET['emptyFieldsError']) {
+                $error = 'emptyFieldsError';
+            }
+            if (isset($_GET['id'])) {
+                $codigoArticulo = $_GET['id'];
+            }else{
+                header('Location: ?action=mostrar_articulos');
+            }
+            $articulosController->editar_articulo($codigoArticulo,$categorias,$error);
+            break;
+        case 'editar_articulo_check':
+            $articulosController = new ArticulosController();
+            $articulosController->editar_articulo_check();
+            break;
         case 'check_login':
             if (isset($_POST['correo']) && isset($_POST['key'])) {
                 $usu = $_POST['correo'];
@@ -184,22 +199,64 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
             $usersController->logout();
             break;
         case 'gestion_categorias':
-            $categoriasController->getCategoriasView();
+            $error = null;
+            if (isset($_GET['error_borrado'])) {
+                $error = 'error_borrado';
+            }
+            if (isset($_GET['cat_padre'])) {
+                $error = 'cat_padre';
+            }
+            $categoriasController->getCategoriasView($error);
             break;
         case 'borrar_categoria';
-            if(isset($_GET['id_cat'])) {
-                $categoriasController->borrarCategoria($_GET['id_cat']);
+            $id = null;
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+                $categoriasController->borrarCategoria($id);
+            } else {
+                header('Location: ?action=gestion_categorias');
             }
-        break;
+            break;
         case 'nueva_categoria':
             $error = null;
-            if(isset($_GET['codigo_duplicado'])) {
+            if (isset($_GET['codigo_duplicado'])) {
                 $error = true;
             }
-            $categoriasController -> nuevaCategoria($error);
+            $categoriasController->nuevaCategoria($error);
         case 'nueva_categoria_check':
-            $categoriasController -> nueva_categoria_check();
+            $categoriasController->nueva_categoria_check();
             break;
+        case 'edicion_categoria':
+            $id = null;
+            if (isset($_GET['id_cat'])) {
+                $id = $_GET['id_cat'];
+            }
+            $categoriasController->edicion_categoria($id);
+            break;
+        case 'edicion_categoria_check':
+            $categoriasController->edicion_categoria_check();
+            break;
+        case 'add_carrito':
+                $carritoController = new CarritoController();
+                $carritoController->add();
+            break;
+        case 'gestion_usuarios':
+            if (isset($_GET["pagina"])) {
+                $pagina = $_GET["pagina"];
+                $inicio = ($pagina - 1) * $pags;
+            } else {
+                $pagina = 1;
+                $inicio = 0;
+            }
+            $usersController->gestion_usuarios($pagina,$inicio);
+            break;
+            case "gestion_user":
+                $dni = null;
+            if (isset($_GET['dni'])) {
+                $dni = $_GET['dni'];
+            }
+            $usersController->gestion_user($dni);
+                break;
         default:
             http_response_code(404);
             echo "Página no encontrada";
