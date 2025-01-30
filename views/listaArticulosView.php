@@ -9,9 +9,9 @@ if (isset($codigoArticulo)) {
 
 <div class="flexmenu space">
     <div class="centrar-elemento flexmenu">
-        Orden:
-        <a href="?action=mostrar_articulos&order=asc"><button class="btn btn-success">ASC</button></a>
-        <a href="?action=mostrar_articulos&order=desc"><button class="btn btn-success">DESC</button></a>
+        Orden:        
+        <a href="?action=mostrar_articulos&order=asc<?= isset($cat) ? '&cat='.$cat : ''; ?>"><button class="btn btn-success">ASC</button></a>
+        <a href="?action=mostrar_articulos&order=desc<?= isset($cat) ? '&cat='.$cat : ''; ?>"><button class="btn btn-success">DESC</button></a>
 
         <?php if (isset($_SESSION['rol']) && ($_SESSION['rol'] == 'admin' || $_SESSION['rol'] == 'editor')) { ?>
             <a href="?action=nuevo_articulo"><button class="btn btn-success">Nuevo Articulo</button></a>

@@ -240,6 +240,23 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
                 $carritoController = new CarritoController();
                 $carritoController->add();
             break;
+        case 'gestion_usuarios':
+            if (isset($_GET["pagina"])) {
+                $pagina = $_GET["pagina"];
+                $inicio = ($pagina - 1) * $pags;
+            } else {
+                $pagina = 1;
+                $inicio = 0;
+            }
+            $usersController->gestion_usuarios($pagina,$inicio);
+            break;
+            case "gestion_user":
+                $dni = null;
+            if (isset($_GET['dni'])) {
+                $dni = $_GET['dni'];
+            }
+            $usersController->gestion_user($dni);
+                break;
         default:
             http_response_code(404);
             echo "Página no encontrada";

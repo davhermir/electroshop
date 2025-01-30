@@ -65,7 +65,7 @@ class GestorUsuarios
         }
     }
     //Para mostrar los datos de los usuarios 
-    public function mostrar($inicio, $pags)
+    public function getUsers($inicio, $pags)
     {
         $sql = "SELECT * FROM usuarios LIMIT " . $inicio . "," . $pags;
         try {
