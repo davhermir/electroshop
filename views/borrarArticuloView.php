@@ -27,7 +27,7 @@ echo "";
 */
 ?>
 <h1> Está seguro de eliminar el arttículo <?=$articulo?> ? </h1>
-    <a href="?action=mostrar_articulos&codigo=<?=$articulo?>&eliminar=true"><button>Sí</button></a>
-    <a href="?action=mostrar_articulos"><button>No</button></a>
+    <a href="?action=mostrar_articulos&codigo=<?=$articulo?>&eliminar=true"><button class="btn btn-success boton boton">Sí</button></a>
+    <a href="?action=mostrar_articulos"><button class="btn btn-success boton boton">No</button></a>
     
 

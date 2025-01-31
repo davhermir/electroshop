@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     height: 100%;
 }
 
@@ -15,9 +15,7 @@ body {
     margin:0px;
     border-radius: 5px;
 }
-.header-links a:hover{
-    background-color: #9beaa0;
-}
+
 
 .cabeceraimg{
     padding-left: 1%;
@@ -36,20 +34,13 @@ body {
 
 .nav a {
     display: block;
-    color: green;
     padding: 10px;
-    text-decoration: none;
     margin-bottom: 5px;
-    border-radius: 5px;
-}
-
-.nav a:hover {
-    background-color: #9beaa0;
 }
 
 .active {
-    background-color: #9beaa0;
-    text-decoration: underline;
+    color: #9beaa0 !important;
+    text-decoration: underline !important;
 }
 
 .menu-left{
@@ -118,7 +109,9 @@ article img {
 .menu-nav {
     list-style-type: none;
     padding-left: 0;
+    width: 100%;
     margin: 0;
+    border-bottom: 0.4px solid #c4f2cb;
 }
 
 .menu-item {
@@ -126,6 +119,7 @@ article img {
 }
 
 .menu-item > p {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -135,11 +129,12 @@ article img {
     margin: 0;
     padding: 10px;
     position: relative;
-    border-radius: 5px
 }
 
 .menu-item > p:hover {
-    background-color: #9beaa0;
+    color: #9beaa0;
+    font-size: 1.05em;
+    font-weight: bold;
 }
 
 .submenu {
@@ -150,13 +145,13 @@ article img {
     padding-left: 20px;
 }
 
-.submenu li a {
-    color: green;
+a{
     text-decoration: none;
+    color:#2d9233;
 }
 
-.submenu li a:hover {
-    background-color: #9beaa0;
+a:hover {
+    color: #9beaa0;
 }
 
 .menu-item.open .submenu {
@@ -193,10 +188,7 @@ input {
 input:active, input:focus {
     border: 3px solid rgb(87, 196, 87);;
   }
-a{
-    text-decoration: none;
-    color:#2d9233;
-}
+
 
 
 
@@ -249,4 +241,48 @@ a{
 
 .cart-summary .btn:disabled {
     background-color: #ddd;
+}
+
+.img-max-size{
+    max-width: 150px;
+    max-height: 150px;
+}
+
+.max-height{
+    height: 100%;
+}
+
+.overflow-text{
+    overflow: scroll;
+    max-height: 20vh;
+}
+
+.row-flex{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.deleted{
+    color: grey;
+    font-size: 0.8em;
+}
+
+.price{
+    font-size: 1.5em;
+    font-weight: bold;
+    color: rgb(150, 193, 160)
+}
+
+.boton{
+    font-size: 12px;
+}
+.form-control{
+    border-color: green !important;
+    margin-bottom: 10px;
+    width: 30vw;
+}
+/*  Tamaño badget */
+.widtha{
+    font-size: 20px;
 }

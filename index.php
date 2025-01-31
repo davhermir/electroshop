@@ -78,6 +78,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
             $articulosController->listarArticulos($pagina, $pags, $inicio, $order, $codigoArticulo, $cat);
             break;
         case 'buscar_articulo':
+            $pags = 8;
             $articulosController = new ArticulosController();
             if (isset($_GET["pagina"])) {
                 $pagina = $_GET["pagina"];

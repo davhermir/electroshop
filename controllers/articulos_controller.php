@@ -11,14 +11,15 @@ class ArticulosController
   {
     $con = conectar_db_pdo();
     $gestor = new GestorArticulos($con);
-    $num_total_registros = $gestor->countTotalArticulos($cat);
+    $admin = (isset($_SESSION['rol'])&&$_SESSION['rol']=='admin') ? true : false;
+    $num_total_registros = $gestor->countTotalArticulos($cat,$admin);
     $total_paginas = ceil($num_total_registros / $pags);
     $codigoArticulo = $codigo;
     $res = [];
     if ($asc == "asc") {
-      $res = $gestor->mostrarAsc(false, $ini, $pags, $cat);
+      $res = $gestor->mostrarAsc(false, $ini, $pags, $cat,$admin);
     } else {
-      $res = $gestor->mostrarAsc(true, $ini, $pags, $cat);
+      $res = $gestor->mostrarAsc(true, $ini, $pags, $cat,$admin);
     }
 
     require VIEWS_PATH . '/listaArticulosView.php';
@@ -28,9 +29,10 @@ class ArticulosController
   {
     $con = conectar_db_pdo();
     $gestor = new GestorArticulos($con);
-    $num_total_registros = $gestor->countTotalArticulosNombre($nombre);
+    $admin = (isset($_SESSION['rol'])&&$_SESSION['rol']=='admin') ? true : false;
+    $num_total_registros = $gestor->countTotalArticulosNombre($nombre,$admin);
     $total_paginas = ceil($num_total_registros / $pags);
-    $res = $gestor->buscar($nombre, $ini, $pags);
+    $res = $gestor->buscar($nombre, $ini, $pags,$admin);
 
     require VIEWS_PATH . '/listaArticulosView.php';
   }

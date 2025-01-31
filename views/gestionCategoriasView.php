@@ -1,5 +1,5 @@
 <h3>Gestión Categorías</h3>
-<a href="?action=nueva_categoria"><button class="btn btn-success">Nueva Categoría</button></a>
+<a href="?action=nueva_categoria"><button class="btn btn-success boton">Nueva Categoría</button></a>
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
