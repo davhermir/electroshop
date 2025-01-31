@@ -8,15 +8,14 @@ if (isset($codigoArticulo)) {
 
 <section>
     <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-start">
             <?php
             if (isset($res) && !empty($res)) {
                 foreach ($res as $articulo) { 
                     $activo=$articulo->getActivo();
                     ?>
-                    <!--<article class="articulo">-->
                     <div class="col mb-5">
-                        <div class="card max-height">
+                        <div class="card max-height border-item">
                             <?php if ($articulo->getDescuento() && $articulo->getDescuento() > 0) { ?>
                                 <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
                                     <?php echo '-' . htmlspecialchars($articulo->getDescuento()) . '%'; ?>
@@ -32,10 +31,12 @@ if (isset($codigoArticulo)) {
                                     Inactivo
                                 </div>
                             <?php } }?>
+                            <div class="center-img">
                             <img class="card-img-top img-max-size"
                                 src="images/<?php echo htmlspecialchars($articulo->getImagen()) ?>" alt="Imagen del artículo">
-                            <div class="card-body p-4">
-                                <div class="text-center">
+                           </div>
+                             <div class="card-body p-4">
+                                <div>
                                     <div>
                                         <?php if ($articulo->getDescuento() != 0) { ?>
                                             <del class="deleted"> PVPr €<?php echo htmlspecialchars($articulo->getPrecio()) ?></del>
@@ -45,12 +46,13 @@ if (isset($codigoArticulo)) {
                                             <h7 class="price">€<?php echo htmlspecialchars($articulo->calcularPrecioOferta()) ?></h7>
                                         </div>
                                     </div>
-
+                                    <div>    
                                     <h5 class="fw-bolder"><?php echo htmlspecialchars($articulo->getNombre()) ?></h5>
                                     <p class="overflow-text"><?php echo htmlspecialchars($articulo->getDescripcion()) ?></p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="card-footer pt-0 border-top-0 bg-transparent">
                                 <div class="text-center">
                                     <form method='POST' action="?action=add_carrito">
                                         <input type='hidden' name='id_producto' value=<?= $articulo->getCodigo() ?>>

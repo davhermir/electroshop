@@ -1,6 +1,7 @@
 body {
     font-family: 'Roboto', sans-serif;
     height: 100%;
+    background-color: #f6f6f6;
 }
 
 /* HEADER */
@@ -79,16 +80,6 @@ footer{
     padding-bottom: 20vh;
 }
 
-article {
-    width: 15%;
-    height: 20%;
-    float:left;
-}
-
-article img {
-    width: 100%;
-    height: auto;
-}
 
 /* COMMON */
 
@@ -206,12 +197,6 @@ input:active, input:focus {
     border-bottom: none;
 }
 
-.product-img {
-    max-width: 60px;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
 .cart-summary {
     padding: 20px;
     background: #f8f9fa;
@@ -220,7 +205,7 @@ input:active, input:focus {
 }
 
 .cart-summary .total-price {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
     font-weight: 600;
 }
 
@@ -249,12 +234,15 @@ input:active, input:focus {
 }
 
 .max-height{
-    height: 100%;
+    max-height: 550px;
+    height:100%;
 }
 
 .overflow-text{
-    overflow: scroll;
-    max-height: 20vh;
+    font-size: 12px;
+    overflow-y: scroll;
+    color:rgb(58, 58, 58);
+    max-height: 120px;
 }
 
 .row-flex{
@@ -265,13 +253,13 @@ input:active, input:focus {
 
 .deleted{
     color: grey;
-    font-size: 0.8em;
+    font-size: .75rem;
 }
 
 .price{
     font-size: 1.5em;
     font-weight: bold;
-    color: rgb(150, 193, 160)
+    color: rgb(110, 168, 123);
 }
 
 .boton{
@@ -285,4 +273,15 @@ input:active, input:focus {
 /*  Tamaño badget */
 .widtha{
     font-size: 20px;
+}
+
+.center-img{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.border-item{
+    box-shadow: -1px 2px 5px 0px rgb(0, 0, 0);
 }
