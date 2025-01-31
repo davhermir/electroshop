@@ -159,7 +159,7 @@ class GestorCategorias
     }
 
     public function getCategoriasByidPadre($codigo){
-        $sql = "SELECT * FROM categorias WHERE codCategoriaPadre LIKE :codigo and activo=1";
+        $sql = "SELECT * FROM categorias WHERE codCategoriaPadre LIKE :codigo";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':codigo', "$codigo", PDO::PARAM_STR);

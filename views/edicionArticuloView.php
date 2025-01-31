@@ -7,7 +7,7 @@
     <div class="form-group">
         <label for="nombre">Nombre:</label>
         <input class="form-control" maxlength="40" size="40" name="nombre" id="nombre" required
-            value=<?= $articulo->getNombre() ?>>
+            value="<?= $articulo->getNombre() ?>">
     </div>
     <div class="form-group">
         <label for="descripcion">Descripción:</label>

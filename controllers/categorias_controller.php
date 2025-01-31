@@ -158,8 +158,9 @@ class CategoriasController
 
       $gestorArticulos = new GestorArticulos($con);
       $id = $_POST['codigo'];
-      $articulos = $gestorArticulos->getArticulosByCategoria($id);
-      $catHijas = $gestor->getCategoriasByidPadre($id);
+      $codigoAnterior = $_POST['codigoAnterior'];
+      $articulos = $gestorArticulos->getArticulosByCategoria($codigoAnterior);
+      $catHijas = $gestor->getCategoriasByidPadre($codigoAnterior);
 
       if ($articulos > 0) {
         header('Location: ?action=gestion_categorias&error_borrado=true');
@@ -173,7 +174,6 @@ class CategoriasController
           $_POST['activo'],
           $categoriaPadre
         );
-        $codigoAnterior = $_POST['codigoAnterior'];
         $gestor->modificar($categoria,$codigoAnterior);
       }
 
