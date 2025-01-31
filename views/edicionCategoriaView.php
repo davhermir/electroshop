@@ -5,7 +5,8 @@
     <div class="form-group">
         <label for="codigo">Codigo:</label>
         <input class="form-control" maxlength="11" size="11" name="codigo" id="codigo"
-            value=<?= $categoria->getCodigo() ?> onlyread required><br>
+            value=<?= $categoria->getCodigo() ?> required><br>
+        <input hidden name="codigoAnterior" value=<?= $categoria->getCodigo() ?>>
     </div>
     <div class="form-group">
         <label for="nombre">Nombre:</label>

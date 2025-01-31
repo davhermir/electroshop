@@ -96,15 +96,16 @@ class GestorCategorias
     }
 
     //Para modificar los datos a partir del nombre del usuario 
-    public function modificar(Categoria $categoria)
+    public function modificar(Categoria $categoria,$codigoAnterior)
     {
-        $sql = "UPDATE categorias SET nombre=:nombre ,  activo=:activo, codCategoriaPadre=:codCategoriaPadre   WHERE codigo = :codigo";
+        $sql = "UPDATE categorias SET codigo=:codigo, nombre=:nombre ,  activo=:activo, codCategoriaPadre=:codCategoriaPadre WHERE codigo = :codigoAnterior";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':codigo', $categoria->getCodigo());
             $stmt->bindValue(':nombre', $categoria->getNombre());
             $stmt->bindValue(':activo', $categoria->getActivo());
             $stmt->bindValue(':codCategoriaPadre', $categoria->getCodpadre());
+            $stmt->bindValue(':codigoAnterior', $codigoAnterior);
 
             if ($stmt->execute()) {
                 header("Location: ?action=gestion_categorias");

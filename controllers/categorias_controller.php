@@ -100,7 +100,6 @@ class CategoriasController
     $gestorArticulos = new GestorArticulos($con);
     $articulos = $gestorArticulos->getArticulosByCategoria($id);
     $catHijas = $gestor->getCategoriasByidPadre($id);
-    echo '<script>console.log("' . $articulos . $catHijas . '")</script>';
     if ($articulos > 0) {
       header('Location: ?action=gestion_categorias&error_borrado=true');
     } else if ($catHijas > 0) {
@@ -140,7 +139,8 @@ class CategoriasController
     }
   }
 
-  public function edicion_categoria($id){
+  public function edicion_categoria($id)
+  {
     $con = conectar_db_pdo();
     $gestor = new GestorCategorias($con);
     $categoria = $gestor->buscarCodigo($id)[0];
@@ -152,18 +152,31 @@ class CategoriasController
 
   public function edicion_categoria_check()
   {
-    $con = conectar_db_pdo();
-    $gestor = new GestorCategorias($con);
-
     if (isset($_POST['nombre'])) {
-      $categoriaPadre = $_POST['categoriaPadre'] !== 'null' ? $_POST['categoriaPadre'] : null;
+      $con = conectar_db_pdo();
+      $gestor = new GestorCategorias($con);
+
+      $gestorArticulos = new GestorArticulos($con);
+      $id = $_POST['codigo'];
+      $articulos = $gestorArticulos->getArticulosByCategoria($id);
+      $catHijas = $gestor->getCategoriasByidPadre($id);
+
+      if ($articulos > 0) {
+        header('Location: ?action=gestion_categorias&error_borrado=true');
+      } else if ($catHijas > 0) {
+        header('Location: ?action=gestion_categorias&cat_padre=true');
+      } else {
+        $categoriaPadre = $_POST['categoriaPadre'] !== 'null' ? $_POST['categoriaPadre'] : null;
         $categoria = new Categoria(
           $_POST['codigo'],
           $_POST['nombre'],
           $_POST['activo'],
           $categoriaPadre
         );
-        $gestor->modificar($categoria);
+        $codigoAnterior = $_POST['codigoAnterior'];
+        $gestor->modificar($categoria,$codigoAnterior);
+      }
+
     }
   }
 }

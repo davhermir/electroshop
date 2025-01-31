@@ -197,7 +197,7 @@ class ArticulosController
             $_POST['activo'],
           );
         } else {
-          $ruta = "Images/" . $nombre_archivo;
+          $ruta = "images/" . $nombre_archivo;
           list($ancho, $alto, $tipos, $atributos) = getimagesize($nombretemporal);
           if ($_FILES['img']['size'] <= 3000000 && $ancho && $ancho <= 200 && $alto <= 200) {
             if (move_uploaded_file($nombretemporal, $ruta)) {

@@ -285,3 +285,18 @@ input:active, input:focus {
 .border-item{
     box-shadow: -1px 2px 5px 0px rgb(0, 0, 0);
 }
+
+/* carrito view */
+.litle-img{
+max-width: 70px;
+height: auto;
+margin-right: 10px;
+}
+
+.d-flex{
+    justify-content: space-between;
+}
+
+.bold{
+    font-weight: bold;
+}

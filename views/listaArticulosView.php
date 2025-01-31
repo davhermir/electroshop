@@ -56,6 +56,7 @@ if (isset($codigoArticulo)) {
                                 <div class="text-center">
                                     <form method='POST' action="?action=add_carrito">
                                         <input type='hidden' name='id_producto' value=<?= $articulo->getCodigo() ?>>
+                                        <input type='number' name='cantidad' value='1' min='1' hidden>
                                         <button type='submit' class="btn btn-success boton boton">Añadir al carrito</button>
                                     </form>
                                 </div>

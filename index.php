@@ -63,7 +63,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
     switch ($action) {
         case 'mostrar_articulos':
             $articulosController = new ArticulosController();
-            $pags = 8;
+            $pags = 6;
             if (isset($_GET["pagina"])) {
                 $pagina = $_GET["pagina"];
                 $inicio = ($pagina - 1) * $pags;
@@ -78,7 +78,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
             $articulosController->listarArticulos($pagina, $pags, $inicio, $order, $codigoArticulo, $cat);
             break;
         case 'buscar_articulo':
-            $pags = 8;
+            $pags = 6;
             $articulosController = new ArticulosController();
             if (isset($_GET["pagina"])) {
                 $pagina = $_GET["pagina"];
@@ -241,6 +241,22 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
         case 'add_carrito':
                 $carritoController = new CarritoController();
                 $carritoController->add();
+            break;
+        case 'restar_carrito':
+            $id=null;
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+            }
+            $carritoController = new CarritoController();
+                $carritoController->restar($id);
+            break;
+        case 'sumar_carrito':
+            $id=null;
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+            }
+            $carritoController = new CarritoController();
+                $carritoController->sumar($id);
             break;
         case 'gestion_usuarios':
             if (isset($_GET["pagina"])) {

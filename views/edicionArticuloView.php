@@ -30,7 +30,7 @@
         <input class="form-control" type="number" name="precio" id="precio" value=<?= $articulo->getPrecio() ?> required>
     </div>
     <div class="form-group">
-        <img class="imgwidth" src="Images/<?= $articulo->getImagen() ?>" alt="Imagen del artículo">
+        <img class="imgwidth" src="images/<?= $articulo->getImagen() ?>" alt="Imagen del artículo">
         <label for="imagen">Cambiar Imagen:</label>
         <input class="form-control" type="file" name="img" id="img" accept=".jpg, .jpeg, .png">
         <input type="hidden" name="imagenAnterior" value=<?= $articulo->getImagen() ?>>
