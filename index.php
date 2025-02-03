@@ -291,7 +291,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
         case 'success':
             $pedidosController = new PedidosController();
             $pedidosController->insertar();
-            echo ' success';
             break;
         case 'ver_pedidos':
             $pedidosController = new PedidosController();
