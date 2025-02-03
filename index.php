@@ -13,6 +13,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/header_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/categorias_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -43,6 +44,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
     <script src="global.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <div>
@@ -121,7 +123,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
             $categorias = $categoriasController->getCategoriasArticulos();
             $articulosController = new ArticulosController();
             $error = null;
-            $codigoArticulo=null;
+            $codigoArticulo = null;
             if (isset($_GET['fileSaveError']) && $_GET['fileSaveError']) {
                 $error = 'fileSaveError';
             } else if (isset($_GET['fileError']) && $_GET['fileError']) {
@@ -131,10 +133,10 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
             }
             if (isset($_GET['id'])) {
                 $codigoArticulo = $_GET['id'];
-            }else{
+            } else {
                 header('Location: ?action=mostrar_articulos');
             }
-            $articulosController->editar_articulo($codigoArticulo,$categorias,$error);
+            $articulosController->editar_articulo($codigoArticulo, $categorias, $error);
             break;
         case 'editar_articulo_check':
             $articulosController = new ArticulosController();
@@ -239,24 +241,24 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
             $categoriasController->edicion_categoria_check();
             break;
         case 'add_carrito':
-                $carritoController = new CarritoController();
-                $carritoController->add();
+            $carritoController = new CarritoController();
+            $carritoController->add();
             break;
         case 'restar_carrito':
-            $id=null;
+            $id = null;
             if (isset($_GET['id'])) {
                 $id = $_GET['id'];
             }
             $carritoController = new CarritoController();
-                $carritoController->restar($id);
+            $carritoController->restar($id);
             break;
         case 'sumar_carrito':
-            $id=null;
+            $id = null;
             if (isset($_GET['id'])) {
                 $id = $_GET['id'];
             }
             $carritoController = new CarritoController();
-                $carritoController->sumar($id);
+            $carritoController->sumar($id);
             break;
         case 'gestion_usuarios':
             if (isset($_GET["pagina"])) {
@@ -266,26 +268,43 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
                 $pagina = 1;
                 $inicio = 0;
             }
-            $usersController->gestion_usuarios($pagina,$inicio);
+            $usersController->gestion_usuarios($pagina, $inicio);
             break;
-            case "gestion_user":
-                $dni = null;
+        case "gestion_user":
+            $dni = null;
             if (isset($_GET['dni'])) {
                 $dni = $_GET['dni'];
             }
             $usersController->gestion_user($dni);
-                break;
-            case 'gestion_user_update':
-                $usersController->gestion_user_update();
-                break;
-            case 'mostrar_carrito':
-                $carritoController = new CarritoController();
-                $carritoController->mostrar_carrito();
-                break;
-            case'eliminar_carrito':
-                $carritoController = new CarritoController();
-                $carritoController->eliminar_carrito();
-                break;
+            break;
+        case 'gestion_user_update':
+            $usersController->gestion_user_update();
+            break;
+        case 'mostrar_carrito':
+            $carritoController = new CarritoController();
+            $carritoController->mostrar_carrito();
+            break;
+        case 'eliminar_carrito':
+            $carritoController = new CarritoController();
+            $carritoController->eliminar_carrito();
+            break;
+        case 'success':
+            $pedidosController = new PedidosController();
+            $pedidosController->insertar();
+            echo ' success';
+            break;
+        case 'ver_pedidos':
+            $pedidosController = new PedidosController();
+            $pedidosController->ver_pedidos();
+            break;
+        case 'info_pedido':
+            $idPedido = null;
+            if (isset($_GET['id_pedido'])) {
+                $idPedido = $_GET['id_pedido'];
+            }
+            $pedidosController = new PedidosController();
+            $pedidosController->info_pedido($idPedido);
+            break;
         default:
             http_response_code(404);
             echo "Página no encontrada";

@@ -1,7 +1,8 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/config/conectar_db.php');
 
-include($_SERVER['DOCUMENT_ROOT'] . '/models/GestorCarrito.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/models/GestorCarrito.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/models/GestorUsuarios.php');
 
 class CarritoController
 {
@@ -40,6 +41,7 @@ class CarritoController
             'id' => $producto->getCodigo(),
             'nombre' => $producto->getNombre(),
             'precio' => $producto->calcularPrecioOferta(),
+            'pvp' => $producto->getPrecio(),
             'descuento' => $producto->getDescuento(),
             'cantidad' => $cantidad,
             'img' => $producto->getImagen()
@@ -82,6 +84,12 @@ class CarritoController
 
   public function mostrar_carrito()
   {
+    $user = null;
+    if(isset($_SESSION['dni'])) {
+      $con = conectar_db_pdo();
+      $gestorUsuarios = new GestorUsuarios($con);
+      $user = $gestorUsuarios->buscarDni($_SESSION['dni'])[0];
+    }
     $carrito = null;
     if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
       $carrito = $_SESSION['carrito'];

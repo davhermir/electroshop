@@ -1,9 +1,9 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/config/conectar_db.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/models/Usuario.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/models/UsuarioShort.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/models/GestorUsuarios.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/libs/lib.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/models/Usuario.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/models/UsuarioShort.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/models/GestorUsuarios.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/libs/lib.php');
 class UsuariosController
 {
 

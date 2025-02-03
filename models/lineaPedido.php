@@ -1,8 +1,8 @@
 <?php
 class LineaPedido
 {
-    private $numLinea;
     private $numPedido;
+    private $numLinea;
     private $codArticulo;
     private $cantidad;
     private $precio;

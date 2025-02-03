@@ -7,7 +7,7 @@
                 <a href="acerca.php" class="link margin-right">Acerca de</a>
                 <a href="contacto.php" class="link margin-right">Contacto</a>
                 <?php if (isset($dni)) { ?>
-                    <a href="pedidos.php" class="link margin-right">Pedidos</a>
+                    <a href="?action=ver_pedidos" class="link margin-right">Pedidos</a>
                     <a href="?action=cuenta" class="link margin-right">Cuenta</a>
                 <?php }
                 if (isset($admin) || isset($editor)) { ?>
