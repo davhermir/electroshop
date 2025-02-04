@@ -12,7 +12,7 @@
     <tbody class="table-group-divider">
         <?php
         foreach ($users as $user) {
-            if($user->getDni() !=$_SESSION['dni']){
+            if($user->getDni() != $_SESSION['dni']){
             echo '<tr>';
             $activo = $user->getActivo() == 1 ? '<i class="bi bi-check"></i>' : '<i class="bi bi-x"></i>';
             echo '<td>' . $user->getDni() . '</td>';
@@ -23,18 +23,20 @@
             echo '</tr>';
             }
         }
-        $total_paginas;
-        $num_total_registros;
-        if ($total_paginas > 1) {
-            for ($i = 1; $i <= $total_paginas; $i++) {
-                if ($pagina == $i) {
-                    echo $pagina . " ";
-                } else {
-                    echo "<a href='/?action=gestion_usuarios&pagina=" . $i . "'>" . $i . "</a>  ";
-                }
-            }
-        }
-        echo "  | Paginas:" . $total_paginas . "  | Total elementos: " . $num_total_registros;
         ?>
     </tbody>
 </table>
+<?php
+$total_paginas;
+$num_total_registros;
+if ($total_paginas > 1) {
+    for ($i = 1; $i <= $total_paginas; $i++) {
+        if ($pagina == $i) {
+            echo $pagina . " ";
+        } else {
+            echo "<a href='/?action=gestion_usuarios&pagina=" . $i . "'>" . $i . "</a>  ";
+        }
+    }
+}
+echo "  | Paginas:" . $total_paginas . "  | Total elementos: " . $num_total_registros;
+?>

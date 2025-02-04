@@ -22,7 +22,7 @@ class GestorArticulos
             $stmt->bindValue(':imagen', $articulo->getImagen());
             $stmt->bindValue(':descuento', $articulo->getDescuento());
             $stmt->bindValue(':activo', $articulo->getActivo());
-            
+
             if ($stmt->execute()) {
                 header("Location: ?action=mostrar_articulos");
             } else {
@@ -33,15 +33,15 @@ class GestorArticulos
         }
     }
     //Para mostrar los datos de los usuarios 
-    public function mostrar($inicio,$pags,$cat)
+    public function mostrar($inicio, $pags, $cat)
     {
         if ($cat !== null) {
-            $sql = "SELECT * FROM articulos WHERE WHERE categoria = :categoria LIMIT ". $inicio . "," . $pags;
-        }else{
-            $sql = "SELECT * FROM articulos LIMIT ". $inicio . "," . $pags;
+            $sql = "SELECT * FROM articulos WHERE WHERE categoria = :categoria LIMIT " . $inicio . "," . $pags;
+        } else {
+            $sql = "SELECT * FROM articulos LIMIT " . $inicio . "," . $pags;
         }
-        
-        
+
+
         try {
             $stmt = $this->db->prepare($sql);
             if ($cat !== null) {
@@ -67,22 +67,32 @@ class GestorArticulos
             echo "Error en la consulta: " . $e->getMessage();
         }
     }
-    public function mostrarAsc($desc,$inicio,$pags,$cat)
+    public function mostrarAsc($desc, $inicio, $pags, $cat,$admin)
     {
-        if ($cat !== null) {
-            $sql = "SELECT * FROM articulos WHERE categoria = :categoria
-            OR categoria IN (SELECT codigo FROM categorias WHERE codCategoriaPadre = :categoria)
-             ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+        if ($admin) {
+            if ($cat !== null) {
+                $sql = "SELECT * FROM articulos WHERE categoria = :categoria
+                OR categoria IN (SELECT codigo FROM categorias WHERE codCategoriaPadre = :categoria)
+                ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+            } else {
+                $sql = "SELECT * FROM articulos ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+            }
         } else {
-            $sql = "SELECT * FROM articulos ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+            if ($cat !== null) {
+                $sql = "SELECT * FROM articulos WHERE activo=1 and categoria = :categoria
+                OR categoria IN (SELECT codigo FROM categorias WHERE codCategoriaPadre = :categoria)
+                ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+            } else {
+                $sql = "SELECT * FROM articulos where activo=1 ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+            }
         }
-        
+
         try {
             $stmt = $this->db->prepare($sql);
             if ($cat !== null) {
                 $stmt->bindParam(':categoria', $cat, PDO::PARAM_INT);  // Asumimos que $cat es un número entero
             }
-            $stmt->bindParam(':inicio', $inicio, PDO::PARAM_INT);   
+            $stmt->bindParam(':inicio', $inicio, PDO::PARAM_INT);
             $stmt->bindParam(':pags', $pags, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -105,9 +115,12 @@ class GestorArticulos
         }
     }
     //Para buscar los datos a partir del nombre 
-    public function buscar($cadena,$inicio,$pags)
+    public function buscar($cadena, $inicio, $pags,$admin)
     {
-        $sql = "SELECT * FROM articulos WHERE nombre LIKE :cadena ORDER BY nombre LIMIT ". $inicio . "," . $pags ;
+        $sql = "SELECT * FROM articulos WHERE activo=1 and nombre LIKE :cadena ORDER BY nombre LIMIT " . $inicio . "," . $pags;
+        if($admin){
+            $sql = "SELECT * FROM articulos WHERE nombre LIKE :cadena ORDER BY nombre LIMIT " . $inicio . "," . $pags;
+        }
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':cadena', "%$cadena%", PDO::PARAM_STR);
@@ -161,41 +174,41 @@ class GestorArticulos
     }
 
     public function comprobar_codigo($codigo)
-{
-    if (strlen($codigo) <9) {
-        for ($i = 0; $i < strlen($codigo); $i++) {
-            $char = ord($codigo[$i]);
-            if ($i == 0 || $i == 1 || $i == 2 ) {
-                if (!$this->isChar($char)) {
-                    return false;
-                }
-            } else {
-                if (!$this->isNumber($char)) {
-                    return false;
+    {
+        if (strlen($codigo) < 9) {
+            for ($i = 0; $i < strlen($codigo); $i++) {
+                $char = ord($codigo[$i]);
+                if ($i == 0 || $i == 1 || $i == 2) {
+                    if (!$this->isChar($char)) {
+                        return false;
+                    }
+                } else {
+                    if (!$this->isNumber($char)) {
+                        return false;
+                    }
                 }
             }
+            return true;
+        } else {
+            return false;
         }
-        return true;
-    } else {
+    }
+
+    public function isChar($char)
+    {
+        if (($char >= 65 && $char <= 90) || ($char >= 97 && $char <= 122)) {
+            return true;
+        }
         return false;
     }
-}
 
-public function isChar($char)
-{
-    if (($char >= 65 && $char <= 90) || ($char >= 97 && $char <= 122)) {
-        return true;
+    public function isNumber($number)
+    {
+        if ($number >= 48 && $number <= 57) {
+            return true;
+        }
+        return false;
     }
-    return false;
-}
-
-public function isNumber($number)
-{
-    if ($number >= 48 && $number <= 57) {
-        return true;
-    }
-    return false;
-}
 
     //Para modificar los datos a partir del nombre del usuario 
     public function modificar(Articulo $articulo)
@@ -212,7 +225,7 @@ public function isNumber($number)
             $stmt->bindValue(':descuento', $articulo->getDescuento());
             $stmt->bindValue(':activo', $articulo->getActivo());
             $stmt->bindValue(':codigo', $articulo->getCodigo());
-            
+
             if ($stmt->execute()) {
                 header("Location: ?action=mostrar_articulos");
             } else {
@@ -241,7 +254,8 @@ public function isNumber($number)
         }
     }
 
-    public function buscarCodyImg($codigo,$imagen){
+    public function buscarCodyImg($codigo, $imagen)
+    {
         $sql = "SELECT * FROM articulos WHERE codigo LIKE '$codigo' and imagen like '$imagen'";
         try {
             $stmt = $this->db->prepare($sql);
@@ -269,46 +283,60 @@ public function isNumber($number)
 
     }
 
-    public function countTotalArticulos($cat)
+    public function countTotalArticulos($cat, $admin)
     {
-        if ($cat !== null) {
-            $sql = "SELECT * FROM articulos where categoria = :cat
-            OR categoria IN (SELECT codigo FROM categorias WHERE codCategoriaPadre = :cat)";
+        if ($admin) {
+            if ($cat !== null) {
+                $sql = "SELECT * FROM articulos where categoria = :cat
+                OR categoria IN (SELECT codigo FROM categorias WHERE codCategoriaPadre = :cat)";
+            } else {
+                $sql = "SELECT * FROM articulos";
+            }
         } else {
-            $sql = "SELECT * FROM articulos";
+            if ($cat !== null) {
+                $sql = "SELECT * FROM articulos where activo=1 and categoria = :cat
+                OR categoria IN (SELECT codigo FROM categorias WHERE codCategoriaPadre = :cat)";
+            } else {
+                $sql = "SELECT * FROM articulos where activo=1";
+            }
         }
         $stmt = $this->db->prepare($sql);
-        if($cat!=null){
+        if ($cat != null) {
             $stmt->bindValue(':cat', "$cat", PDO::PARAM_STR);
         }
         try {
             $stmt->execute();
-            return $stmt->rowCount(); 
+            return $stmt->rowCount();
         } catch (PDOException $e) {
             return "Error en la consulta: " . $e->getMessage();
         }
     }
 
-    public function countTotalArticulosNombre($nombre){
-        $sql = "SELECT * FROM articulos WHERE nombre LIKE :cadena";
+    public function countTotalArticulosNombre($nombre,$admin)
+    {
+        $sql = "SELECT * FROM articulos WHERE nombre LIKE :cadena and activo=1";
+        if($admin){
+            $sql = "SELECT * FROM articulos WHERE nombre LIKE :cadena";
+        }
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':cadena', "%$nombre%", PDO::PARAM_STR);
         try {
             $stmt->execute();
-            return $stmt->rowCount(); 
+            return $stmt->rowCount();
         } catch (PDOException $e) {
             return "Error en la consulta: " . $e->getMessage();
         }
 
     }
 
-    public function getArticulosByCategoria($id){
-        $sql = "SELECT * FROM articulos WHERE categoria = :id";
+    public function getArticulosByCategoria($id)
+    {
+        $sql = "SELECT * FROM articulos WHERE categoria = :id and activo=1";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         try {
             $stmt->execute();
-            return $stmt->rowCount(); 
+            return $stmt->rowCount();
         } catch (PDOException $e) {
             return "Error en la consulta: " . $e->getMessage();
         }

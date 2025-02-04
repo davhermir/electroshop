@@ -65,11 +65,12 @@ class GestorUsuarios
         }
     }
     //Para mostrar los datos de los usuarios 
-    public function getUsers($inicio, $pags)
+    public function getUsers($inicio, $pags, $dni)
     {
-        $sql = "SELECT * FROM usuarios LIMIT " . $inicio . "," . $pags;
+        $sql = "SELECT * FROM usuarios where dni not like :dni LIMIT " . $inicio . "," . $pags;
         try {
             $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':dni', $dni);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $usuarios = [];
@@ -206,7 +207,7 @@ class GestorUsuarios
             $stmt->bindValue(':dni', $usuario->getDni());
 
             if ($stmt->execute()) {
-                header("Location: ?acation=listar_usuarios_view");
+                header("Location: ?cation=listar_usuarios_view");
             } else {
                 echo "No se pudieron actualizar los datos.";
             }
@@ -279,7 +280,7 @@ class GestorUsuarios
     public function login($usu, $pwd)
     {
         try {
-            $sql = "select * from usuarios where email=:email";
+            $sql = "select * from usuarios where email=:email and activo=1";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':email', $usu, PDO::PARAM_STR);
             $stmt->execute();
@@ -390,6 +391,23 @@ class GestorUsuarios
         } catch (PDOException $e) {
             echo "<script>console.log('Error en la búsqueda: " . $e->getMessage() . "');</script>";
             return false;
+        }
+    }
+    public function updateUserGestion($dni,$activo,$rol){
+        $sql = "UPDATE usuarios SET rol=:rol,activo=:activo  WHERE dni = :dni";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':rol', $rol);
+            $stmt->bindValue(':activo', $activo);
+            $stmt->bindValue(':dni', $dni);
+
+            if ($stmt->execute()) {
+                header("Location: ?cation=gestion_usuarios");
+            } else {
+                echo "No se pudieron actualizar los datos.";
+            }
+        } catch (PDOException $e) {
+            echo "Ha habido un error al actualizar los valores: " . $e->getMessage();
         }
     }
 }

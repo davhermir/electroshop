@@ -39,7 +39,7 @@ class Pedido
     {
         return $this->codUsuario;
     }
-    public function getAct()
+    public function getActivo()
     {
         return $this->activo;
     }
