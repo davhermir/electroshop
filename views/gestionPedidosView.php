@@ -1,6 +1,6 @@
 <h3>Pedidos</h3>
 <form method="get" action="" name="buscarPedido">
-                    <input type="hidden" name="action" value="ver_pedido">
+                    <input type="hidden" name="action" value="ver_pedidos">
                     <div class="flex-row">
                         <label for="id_pedido"></label>
                         <input type="text" name="id_pedido" id="id_pedido" placeholder="Buscar Pedido"

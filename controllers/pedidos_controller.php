@@ -59,7 +59,7 @@ class PedidosController
         $total_paginas = ceil($num_total_registros / $pags);
         $pedidos = [];
         if($id!=null){
-        $pedidos = $gestorPedidos->getAllPedidos();
+        $pedidos = $gestorPedidos->getPedidoById($id);
         }else{
         $pedidos = $gestorPedidos->getAllPedidos();
         }

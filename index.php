@@ -309,7 +309,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             if(isset($_SESSION['rol'])&&($_SESSION['rol']=='admin')||$_SESSION['rol']=='editor'){
             $pedidosController->gestion_pedidos($pagina, $pags, $inicio, $idPedido);
             }else{
-            $pedidosController->ver_pedidos($pagina, $pags, $inicio,);
+            $pedidosController->ver_pedidos();
             }
             break;
         case 'info_pedido':

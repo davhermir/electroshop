@@ -151,14 +151,14 @@ class GestorPedidos
     }
 
     public function countTotalPedidos($id){
-        if ($id) {
+        if ($id!=null) {
                 $sql = "SELECT * FROM pedidos where idPedido = :id";
         } else {
                 $sql = "SELECT * FROM pedidos";
         }
         $stmt = $this->db->prepare($sql);
         if ($id != null) {
-            $stmt->bindValue(':idPedido', "$id", PDO::PARAM_STR);
+            $stmt->bindValue(':id', "$id", PDO::PARAM_STR);
         }
         try {
             $stmt->execute();
