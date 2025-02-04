@@ -2,6 +2,7 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
+            <th>ID Pedido</th>
             <th>Fecha</th>
             <th>Precio Total</th>
             <th>Estado</th>
@@ -24,6 +25,7 @@
                 break;
             }
             echo '<tr>';
+            echo '<td>' . $pedido->getIdPedido() . '</td>';
             echo '<td>' . $pedido->getFecha() . '</td>';
             echo '<td>' . $pedido->getTotal() . '</td>';
             echo '<td>' . $estado . '</td>';

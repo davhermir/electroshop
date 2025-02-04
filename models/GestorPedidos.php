@@ -18,7 +18,7 @@ class GestorPedidos
             $stmt->bindValue(':total', $pedido->getTotal());
             $stmt->bindValue(':estado', $pedido->getestado());
             $stmt->bindValue(':codUsuario', $pedido->getCodUsuario());
-            $stmt->bindValue(':activo', $pedido->getAct());
+            $stmt->bindValue(':activo', $pedido->getActivo());
         
             if ($stmt->execute()) {
                 $id_pedido = $this->db->lastInsertId();
@@ -48,7 +48,7 @@ class GestorPedidos
                 $_SESSION['carrito'] = [];
                 header('Location: ?action=ver_pedidos');
             } else {
-                return "Ha habido un error al insertar los valores.";
+                echo "Ha habido un error al insertar los valores.";
             }
         } catch (PDOException $e) {
             return "Error al insertar los valores: " . $e->getMessage();
@@ -56,7 +56,7 @@ class GestorPedidos
     }
 
     public function getPedidosByUser($cadena){
-        $sql = "SELECT * FROM pedidos WHERE codUsuario LIKE :cadena";
+        $sql = "SELECT * FROM pedidos WHERE codUsuario LIKE :cadena and activo=1";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':cadena', "%$cadena%", PDO::PARAM_STR);
@@ -98,8 +98,90 @@ class GestorPedidos
             );
         }
         return $lineaspedido;
-    } catch (PDOException $e) {
-        return "Error en la búsqueda: " . $e->getMessage();
+        } catch (PDOException $e) {
+            return "Error en la búsqueda: " . $e->getMessage();
+        }
     }
+
+    public function getAllPedidos(){
+        $sql = "SELECT * FROM pedidos";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pedidos = [];
+            foreach ($result as $row) {
+                $pedidos[] = new Pedido(
+                    $row['idPedido'],
+                    $row['fecha'],
+                    $row['total'],
+                    $row['estado'],
+                    $row['codUsuario'],
+                    $row['activo'],
+                );
+            }
+            return $pedidos;
+        } catch (PDOException $e) {
+            return "Error en la búsqueda: " . $e->getMessage();
+        }
+    }
+
+    public function getPedidoById($id){
+        $sql = "SELECT * FROM pedidos WHERE idPedido LIKE :id";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id', "$id", PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pedidos = [];
+            foreach ($result as $row) {
+                $pedidos[] = new Pedido(
+                    $row['idPedido'],
+                    $row['fecha'],
+                    $row['total'],
+                    $row['estado'],
+                    $row['codUsuario'],
+                    $row['activo'],
+                );
+            }
+            return $pedidos;
+        } catch (PDOException $e) {
+            return "Error en la búsqueda: " . $e->getMessage();
+        }
+    }
+
+    public function countTotalPedidos($id){
+        if ($id) {
+                $sql = "SELECT * FROM pedidos where idPedido = :id";
+        } else {
+                $sql = "SELECT * FROM pedidos";
+        }
+        $stmt = $this->db->prepare($sql);
+        if ($id != null) {
+            $stmt->bindValue(':idPedido', "$id", PDO::PARAM_STR);
+        }
+        try {
+            $stmt->execute();
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            return "Error en la consulta: " . $e->getMessage();
+        }
+    }
+
+    public function modificar($idPedido,$estado,$activo){
+        $sql = "UPDATE pedidos SET estado=:estado, activo=:activo WHERE idPedido  = :idPedido ";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':estado', $estado);
+            $stmt->bindValue(':activo', $activo);
+            $stmt->bindValue(':idPedido', $idPedido);
+            if ($stmt->execute()) {
+                header("Location: ?action=ver_pedidos");
+            } else {
+                echo "No se pudieron actualizar los datos.";
+            }
+        } catch (PDOException $e) {
+            echo "Ha habido un error al actualizar los valores: " . $e->getMessage();
+        }
     }
 }

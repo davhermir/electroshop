@@ -293,8 +293,24 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $pedidosController->insertar();
             break;
         case 'ver_pedidos':
+            $pags = 6;
+            $idPedido = null;
+            if (isset($_GET['id_pedido'])) {
+                $idPedido = $_GET['id_pedido'];
+            }
+            if (isset($_GET["pagina"])) {
+                $pagina = $_GET["pagina"];
+                $inicio = ($pagina - 1) * $pags;
+            } else {
+                $pagina = 1;
+                $inicio = 0;
+            }
             $pedidosController = new PedidosController();
-            $pedidosController->ver_pedidos();
+            if(isset($_SESSION['rol'])&&($_SESSION['rol']=='admin')||$_SESSION['rol']=='editor'){
+            $pedidosController->gestion_pedidos($pagina, $pags, $inicio, $idPedido);
+            }else{
+            $pedidosController->ver_pedidos($pagina, $pags, $inicio,);
+            }
             break;
         case 'info_pedido':
             $idPedido = null;
@@ -303,6 +319,18 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             }
             $pedidosController = new PedidosController();
             $pedidosController->info_pedido($idPedido);
+            break;
+        case 'edicion_pedido':
+            $idPedido = null;
+            if (isset($_GET['id_pedido'])) {
+                $idPedido = $_GET['id_pedido'];
+            }
+            $pedidosController = new PedidosController();
+            $pedidosController->editar_pedido($idPedido);
+            break;
+        case 'edicion_pedido_check':
+            $pedidosController = new PedidosController();
+            $pedidosController->check_editar_pedido();
             break;
         default:
             http_response_code(404);

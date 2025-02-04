@@ -52,11 +52,49 @@ class PedidosController
 
     }
 
+    public function gestion_pedidos($pagina, $pags, $ini,$id){
+        $con = conectar_db_pdo();
+        $gestorPedidos = new GestorPedidos($con);
+        $num_total_registros = $gestorPedidos->countTotalPedidos($id);
+        $total_paginas = ceil($num_total_registros / $pags);
+        $pedidos = [];
+        if($id!=null){
+        $pedidos = $gestorPedidos->getAllPedidos();
+        }else{
+        $pedidos = $gestorPedidos->getAllPedidos();
+        }
+        require VIEWS_PATH . '/gestionPedidosView.php';
+    }
+
     public function info_pedido($idpedido){
         $con = conectar_db_pdo();
         $gestorPedidos = new GestorPedidos($con);
         $pedidos = $gestorPedidos->getlineaPedido($idpedido);
         require VIEWS_PATH . '/listaLineaPedidosView.php';
     }
+
+    public function editar_pedido($idPedido)
+  {
+    $con = conectar_db_pdo();
+    $gestor = new GestorPedidos($con);
+    $data = $gestor->getPedidoById($idPedido);
+    if (count($data) > 0) {
+      $pedido = $data[0];
+    } else {
+      header('Location: action=mostrar_articulos');
+    }
+    require VIEWS_PATH . '/edicionPedidoView.php';
+  }
+
+  public function check_editar_pedido(){
+    if (isset($_POST['id'])) {
+        $con = conectar_db_pdo();
+        $gestor = new GestorPedidos($con);
+          $id=$_POST['id'];
+          $estado = $_POST['estado'];
+          $activo = $_POST['activo'];
+          $gestor->modificar($id,$estado,$activo);
+      }
+  }
 
 }
