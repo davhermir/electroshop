@@ -3,7 +3,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/config/conectar_db.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . '/models/Usuario.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . '/models/UsuarioShort.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . '/models/GestorUsuarios.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . '/libs/lib.php');
 class UsuariosController
 {
 
@@ -93,8 +92,10 @@ class UsuariosController
       $correo = $_POST['correo'];
       if ($gestor->checkDni($dni)) {
         header("Location: ?action=nuevo_usuario&dni_duplicado=true");
+        exit();
       } else if ($gestor->checkCorreo($correo)) {
         header("Location: ?action=nuevo_usuario&correo_duplicado=true");
+        exit();
       } else {
         $rol = isset($_POST['rol']) ? $_POST['rol'] : 'usuario';
         $user = new UsuarioShort(
@@ -111,39 +112,6 @@ class UsuariosController
     }
   }
 
-
-  public function nuevo_usuario_completo_check()
-  {
-    $con = conectar_db_pdo();
-    $gestor = new GestorUsuarios($con);
-    if (isset($_POST['dni'])) {
-      $dni = $_POST['dni'];
-      if (comprobar_dni($dni)) {
-        $result = $gestor->buscarDni($dni);
-        if (count($result) > 0) {
-          header("Location: ?action=nuevo_usuario&dni_duplicado=true");
-        } else {
-          $rol = isset($_POST['rol']) ? $_POST['rol'] : 'usuario';
-          $user = new Usuario(
-            $_POST['dni'],
-            $_POST['clave'],
-            $_POST['nombre'],
-            $_POST['apellidos'],
-            $_POST['direccion'],
-            $_POST['localidad'],
-            $_POST['provincia'],
-            $_POST['telefono'],
-            $_POST['correo'],
-            $rol,
-            1
-          );
-          $gestor->insertar($user);
-        }
-      } else {
-        header("Location: ?action=nuevo_usuario&dni_error=true");
-      }
-    }
-  }
   public function cambio_paswd($error)
   {
     $error_update = null;

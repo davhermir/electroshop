@@ -1,4 +1,5 @@
 <?php
+include($_SERVER['DOCUMENT_ROOT'] . '/libs/lib.php');
 class GestorUsuarios
 {
     private $db;
@@ -321,7 +322,8 @@ class GestorUsuarios
                 return false;
             }
         } else {
-            header( "Location: ?action=nuevo_usuario&dni_error=true");
+           header( "Location: ?action=nuevo_usuario&dni_error=true");
+           exit();
         }
     }
 
@@ -338,7 +340,6 @@ class GestorUsuarios
 
     public function checkCorreoUpdate($correo,$dni)
     {
-        //echo "<script>console.log('PHP-Gestor: " . $correo . "');</script>";
         $result = $this->buscarCorreo($correo);
         if (is_array($result) && count($result) > 0) {
             if($dni == $result[0]->getDni()){

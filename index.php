@@ -14,6 +14,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/categorias_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/usuarios_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/carrito_controller.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/config/seguridad.php');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -61,7 +62,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
     $order = null;
     $codigoArticulo = null;
     $cat = null;
-    //echo "<script>console.log('PHP: " . $action . "');</script>";
     switch ($action) {
         case 'mostrar_articulos':
             $articulosController = new ArticulosController();
@@ -90,10 +90,10 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
                 $inicio = 0;
             }
             $nombre = isset($_GET['nombre']) ? $_GET['nombre'] : null;
-            //echo "<script>console.log('PHP: " . $nombre . "');</script>";
             $articulosController->buscarArticulos($pagina, $pags, $inicio, $nombre);
             break;
         case 'confirm_borrar_articulo':
+            usuarioEditor();
             $articulosController = new ArticulosController();
             if (isset($_GET['codigo'])) {
                 $codigoArticulo = $_GET['codigo'];
@@ -101,6 +101,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $articulosController->confirm_borrar_articulos($codigoArticulo);
             break;
         case 'nuevo_articulo':
+            usuarioEditor();
             $categorias = $categoriasController->getCategoriasArticulos();
             $articulosController = new ArticulosController();
             $error = null;
@@ -116,10 +117,12 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $articulosController->nuevo_articulo($error, $categorias);
             break;
         case 'nuevo_articulo_check':
+            usuarioEditor();
             $articulosController = new ArticulosController();
             $articulosController->nuevo_articulo_check();
             break;
         case 'editar_articulo':
+            usuarioEditor();
             $categorias = $categoriasController->getCategoriasArticulos();
             $articulosController = new ArticulosController();
             $error = null;
@@ -139,6 +142,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $articulosController->editar_articulo($codigoArticulo, $categorias, $error);
             break;
         case 'editar_articulo_check':
+            usuarioEditor();
             $articulosController = new ArticulosController();
             $articulosController->editar_articulo_check();
             break;
@@ -150,6 +154,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             }
             break;
         case 'nuevo_usuario':
+            usuarioAdmin();
             $error = null;
             if (isset($_GET['dni_duplicado']) && $_GET['dni_duplicado']) {
                 $error = 'dni_duplicado';
@@ -161,9 +166,11 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $usersController->nuevo_usuario($error);
             break;
         case 'nuevo_usuario_check':
+            usuarioAdmin();
             $usersController->nuevo_usuario_check();
             break;
         case 'cuenta':
+            usuarioLoged();
             $error = null;
             if (isset($_GET['correo_duplicado']) && $_GET['correo_duplicado']) {
                 $error = 'correo_duplicado';
@@ -171,6 +178,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $usersController->menu_cuenta(null);
             break;
         case 'update_usuario':
+            usuarioLoged();
             $usersController->update_usuario_check();
             break;
         case 'passwd':
@@ -191,7 +199,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             if (isset($_POST['correo']) && $_POST['key']) {
                 $mail = $_POST['correo'];
                 $pwd = $_POST['key'];
-                //echo "<script>console.log('PHP: ". $mail ." ". $pwd . "');</script>";
                 $usersController = new UsuariosController();
                 $usersController->cambio_paswd_check($mail, $pwd);
             } else {
@@ -203,6 +210,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $usersController->logout();
             break;
         case 'gestion_categorias':
+            usuarioEditor();
             $error = null;
             if (isset($_GET['error_borrado'])) {
                 $error = 'error_borrado';
@@ -213,6 +221,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $categoriasController->getCategoriasView($error);
             break;
         case 'borrar_categoria';
+        usuarioEditor();
             $id = null;
             if (isset($_GET['id'])) {
                 $id = $_GET['id'];
@@ -222,15 +231,18 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             }
             break;
         case 'nueva_categoria':
+            usuarioEditor();
             $error = null;
             if (isset($_GET['codigo_duplicado'])) {
                 $error = true;
             }
             $categoriasController->nuevaCategoria($error);
         case 'nueva_categoria_check':
+            usuarioEditor();
             $categoriasController->nueva_categoria_check();
             break;
         case 'edicion_categoria':
+            usuarioEditor();
             $id = null;
             if (isset($_GET['id_cat'])) {
                 $id = $_GET['id_cat'];
@@ -238,6 +250,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $categoriasController->edicion_categoria($id);
             break;
         case 'edicion_categoria_check':
+            usuarioEditor();
             $categoriasController->edicion_categoria_check();
             break;
         case 'add_carrito':
@@ -261,6 +274,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $carritoController->sumar($id);
             break;
         case 'gestion_usuarios':
+            usuarioAdmin();
             if (isset($_GET["pagina"])) {
                 $pagina = $_GET["pagina"];
                 $inicio = ($pagina - 1) * $pags;
@@ -271,6 +285,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $usersController->gestion_usuarios($pagina, $inicio);
             break;
         case "gestion_user":
+            usuarioAdmin();
             $dni = null;
             if (isset($_GET['dni'])) {
                 $dni = $_GET['dni'];
@@ -278,6 +293,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $usersController->gestion_user($dni);
             break;
         case 'gestion_user_update':
+            usuarioAdmin();
             $usersController->gestion_user_update();
             break;
         case 'mostrar_carrito':
@@ -293,6 +309,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $pedidosController->insertar();
             break;
         case 'ver_pedidos':
+            usuarioLoged();
             $pags = 6;
             $idPedido = null;
             if (isset($_GET['id_pedido'])) {
@@ -313,6 +330,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             }
             break;
         case 'info_pedido':
+            usuarioLoged();
             $idPedido = null;
             if (isset($_GET['id_pedido'])) {
                 $idPedido = $_GET['id_pedido'];
@@ -321,6 +339,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $pedidosController->info_pedido($idPedido);
             break;
         case 'edicion_pedido':
+            usuarioEditor();
             $idPedido = null;
             if (isset($_GET['id_pedido'])) {
                 $idPedido = $_GET['id_pedido'];
@@ -329,6 +348,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/controllers/pedidos_controller.php');
             $pedidosController->editar_pedido($idPedido);
             break;
         case 'edicion_pedido_check':
+            usuarioEditor();
             $pedidosController = new PedidosController();
             $pedidosController->check_editar_pedido();
             break;
