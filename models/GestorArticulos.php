@@ -73,17 +73,17 @@ class GestorArticulos
             if ($cat !== null) {
                 $sql = "SELECT * FROM articulos WHERE categoria = :categoria
                 OR categoria IN (SELECT codigo FROM categorias WHERE codCategoriaPadre = :categoria)
-                ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+                ORDER BY descuento DESC, codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
             } else {
-                $sql = "SELECT * FROM articulos ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+                $sql = "SELECT * FROM articulos ORDER BY descuento DESC, codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
             }
         } else {
             if ($cat !== null) {
                 $sql = "SELECT * FROM articulos WHERE activo=1 and categoria = :categoria
                 OR categoria IN (SELECT codigo FROM categorias WHERE codCategoriaPadre = :categoria)
-                ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+                ORDER BY descuento DESC, codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
             } else {
-                $sql = "SELECT * FROM articulos where activo=1 ORDER BY codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
+                $sql = "SELECT * FROM articulos where activo=1 ORDER BY descuento DESC, codigo " . ($desc ? 'DESC' : 'ASC') . " LIMIT :inicio, :pags";
             }
         }
 
