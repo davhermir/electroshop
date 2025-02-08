@@ -356,6 +356,11 @@ include($_SERVER['DOCUMENT_ROOT'] . '/config/seguridad.php');
             $pedidosController = new PedidosController();
             $pedidosController->check_editar_pedido();
             break;
+        case 'informes':
+            usuarioAdmin();
+            $pedidosController = new PedidosController();
+            $pedidosController->informe_pedidos();
+            break;
         default:
             http_response_code(404);
             echo "Página no encontrada";

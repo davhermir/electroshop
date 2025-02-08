@@ -126,6 +126,31 @@ class GestorPedidos
         }
     }
 
+    public function getPedidosMes(){
+        $fecha = date('Y-m-d H:i:s');
+        $mes = date('m', strtotime($fecha));
+        $sql = "SELECT * FROM pedidos where MONTH(fecha)=$mes and activo=1";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $pedidos = [];
+            foreach ($result as $row) {
+                $pedidos[] = new Pedido(
+                    $row['idPedido'],
+                    $row['fecha'],
+                    $row['total'],
+                    $row['estado'],
+                    $row['codUsuario'],
+                    $row['activo'],
+                );
+            }
+            return $pedidos;
+        } catch (PDOException $e) {
+            return "Error en la búsqueda: " . $e->getMessage();
+        }
+    }
+
     public function getPedidoById($id){
         $sql = "SELECT * FROM pedidos WHERE idPedido LIKE :id";
         try {

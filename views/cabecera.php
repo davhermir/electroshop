@@ -15,6 +15,7 @@
                 <?php }
                 if (isset($admin)) { ?>
                     <a href="?action=gestion_usuarios" class="link margin-right">Usuarios</a>
+                    <a href="?action=informes" class="link margin-right">Informes</a>
                 <?php } ?>
             </div>
             <div>
