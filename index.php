@@ -154,7 +154,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/config/seguridad.php');
             }
             break;
         case 'nuevo_usuario':
-            usuarioAdmin();
             $error = null;
             if (isset($_GET['dni_duplicado']) && $_GET['dni_duplicado']) {
                 $error = 'dni_duplicado';
@@ -166,7 +165,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/config/seguridad.php');
             $usersController->nuevo_usuario($error);
             break;
         case 'nuevo_usuario_check':
-            usuarioAdmin();
             $usersController->nuevo_usuario_check();
             break;
         case 'cuenta':
@@ -215,8 +213,14 @@ include($_SERVER['DOCUMENT_ROOT'] . '/config/seguridad.php');
             if (isset($_GET['error_borrado'])) {
                 $error = 'error_borrado';
             }
+            if (isset($_GET['error_editado'])) {
+                $error = 'error_editado';
+            }
             if (isset($_GET['cat_padre'])) {
                 $error = 'cat_padre';
+            }
+            if (isset($_GET['cat_padre_edicion'])) {
+                $error = 'cat_padre_edicion';
             }
             $categoriasController->getCategoriasView($error);
             break;

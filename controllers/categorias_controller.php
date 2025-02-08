@@ -36,12 +36,19 @@ class CategoriasController
   {
     $error_borrado = null;
     $cat_padre = null;
+    $error_editado = null;
     switch ($error) {
       case 'error_borrado':
         $error_borrado = true;
         break;
       case 'cat_padre':
         $cat_padre = true;
+        break;
+      case 'error_editado':
+        $error_editado = true;
+        break;
+      case 'cat_padre_edicion':
+        $cat_padre_edicion = true;
         break;
     }
     $con = conectar_db_pdo();
@@ -159,13 +166,24 @@ class CategoriasController
       $gestorArticulos = new GestorArticulos($con);
       $id = $_POST['codigo'];
       $codigoAnterior = $_POST['codigoAnterior'];
-      $articulos = $gestorArticulos->getArticulosByCategoria($codigoAnterior);
-      $catHijas = $gestor->getCategoriasByidPadre($codigoAnterior);
+      $cambio_codigo = $id != $codigoAnterior;
+      $activoAnterior = $_POST['activoAnterior'];
+      $activo = $_POST['activo'];
+      $inactivo = false;
+      if ($activoAnterior == 1 && $activo == 0) {
+        $inactivo = true;
+      }
+      $articulos = [];
+      $catHijas = [];
+      if ($cambio_codigo || $inactivo) {
+        $articulos = $gestorArticulos->getArticulosByCategoria($codigoAnterior);
+        $catHijas = $gestor->getCategoriasByidPadre($codigoAnterior);
+      }
 
       if ($articulos > 0) {
-        header('Location: ?action=gestion_categorias&error_borrado=true');
+        header('Location: ?action=gestion_categorias&error_editado=true');
       } else if ($catHijas > 0) {
-        header('Location: ?action=gestion_categorias&cat_padre=true');
+        header('Location: ?action=gestion_categorias&cat_padre_edicion=true');
       } else {
         $categoriaPadre = $_POST['categoriaPadre'] !== 'null' ? $_POST['categoriaPadre'] : null;
         $categoria = new Categoria(
@@ -174,7 +192,7 @@ class CategoriasController
           $_POST['activo'],
           $categoriaPadre
         );
-        $gestor->modificar($categoria,$codigoAnterior);
+        $gestor->modificar($categoria, $codigoAnterior);
       }
 
     }

@@ -97,7 +97,7 @@ class UsuariosController
         header("Location: ?action=nuevo_usuario&correo_duplicado=true");
         exit();
       } else {
-        $rol = isset($_POST['rol']) ? $_POST['rol'] : 'usuario';
+        $rol = 'usuario';
         $user = new UsuarioShort(
           $_POST['dni'],
           $_POST['clave'],
