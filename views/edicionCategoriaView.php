@@ -37,6 +37,7 @@
             <option value=0 <?= $selectedFalse ?>>Inactivo</option>
         </select>
     </div>
+    <input hidden name="activoAnterior" value=<?= $categoria->getActivo() ?>>
     <input name="Borrar" value="Vaciar campos" type="reset">&nbsp;&nbsp;&nbsp;
     <input name="Enviar" value="Enviar datos" type="submit"><br>
 </form>

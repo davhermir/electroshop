@@ -97,4 +97,41 @@ class PedidosController
       }
   }
 
+  public function informe_pedidos(){
+    $con = conectar_db_pdo();
+    $gestor = new GestorPedidos($con);
+    $pedidosmes=$gestor->getPedidosMes();
+    $totalitems = $this->getOrderedItems($pedidosmes);
+    $items = array_slice($totalitems, 0, 3);
+    $ingresosTotales = $this->getIngresosTotales($pedidosmes);
+    $pedidosTotales = count($pedidosmes);
+    require VIEWS_PATH . '/informe.php';
+  }
+
+  private function getOrderedItems($pedidos){
+    $con = conectar_db_pdo();
+    $gestor = new GestorPedidos($con);
+    $articulos=[];
+    foreach ($pedidos as $pedido) {
+        $lineas = $gestor->getlineaPedido($pedido->getIdPedido());
+        foreach ($lineas as $item) {
+            if (array_key_exists($item->getCodArticulo(), $articulos)) {
+                $articulos[$item->getCodArticulo()]++;
+            }else{
+                $articulos[$item->getCodArticulo()] = 1;
+            }
+            
+        }
+    }
+    arsort($articulos);
+    return $articulos;
+  }
+
+  private function getIngresosTotales($pedidos){
+    $total = 0;
+    foreach ($pedidos as $pedido) {
+        $total += $pedido->getTotal();
+    }
+    return $total;
+  }
 }

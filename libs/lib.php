@@ -48,10 +48,10 @@ function comprobar_dni($dni)
 
 function comprobar_codigo($codigo)
 {
-    if (strlen($codigo) <9) {
+    if (strlen($codigo) < 9) {
         for ($i = 0; $i < strlen($codigo); $i++) {
             $char = ord($codigo[$i]);
-            if ($i == 0 || $i == 1 || $i == 2 ) {
+            if ($i == 0 || $i == 1 || $i == 2) {
                 if (!isChar($char)) {
                     return false;
                 }

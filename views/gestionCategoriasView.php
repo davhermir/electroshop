@@ -42,8 +42,14 @@
         if (isset($error_borrado)) {
             echo 'La categoría no se puede borrar, está siendo usada en algún artículo';
         }
+        if (isset($error_editado)) {
+            echo 'La categoría no se puede modificar, está siendo usada en algún artículo';
+        }
         if (isset($cat_padre)) {
             echo 'La categoría no se puede borrar, está siendo usada como categoría padre';
+        }
+        if (isset($cat_padre_edicion)) {
+            echo 'La categoría no se puede modificar, está siendo usada como categoría padre';
         }
         ?>
     </tbody>

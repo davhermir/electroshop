@@ -4,8 +4,8 @@
         <nav class="menu-left header-style">
             <div class="header-links">
                 <a href="?action=mostrar_articulos" class="link margin-right">Inicio</a>
-                <a href="acerca.php" class="link margin-right">Acerca de</a>
-                <a href="contacto.php" class="link margin-right">Contacto</a>
+                <a href="?action=mostrar_articulos" class="link margin-right">Acerca de</a>
+                <a href="?action=mostrar_articulos" class="link margin-right">Contacto</a>
                 <?php if (isset($dni)) { ?>
                     <a href="?action=ver_pedidos" class="link margin-right">Pedidos</a>
                     <a href="?action=cuenta" class="link margin-right">Cuenta</a>
@@ -15,6 +15,7 @@
                 <?php }
                 if (isset($admin)) { ?>
                     <a href="?action=gestion_usuarios" class="link margin-right">Usuarios</a>
+                    <a href="?action=informes" class="link margin-right">Informes</a>
                 <?php } ?>
             </div>
             <div>
