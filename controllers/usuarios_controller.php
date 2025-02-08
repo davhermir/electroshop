@@ -224,7 +224,7 @@ class UsuariosController
     $dni = $_SESSION['dni'];
     $con = conectar_db_pdo();
     $gestor = new GestorUsuarios($con);
-    $users=$gestor->getUsers($ini,$pag,$dni);
+    $users=$gestor->getUsers($ini,10,$dni);
     $num_total_registros = $gestor->countTotalUsuarios()-1;
     $total_paginas = ceil($num_total_registros / 10);
     require VIEWS_PATH . '/gestionUsuariosView.php';
