@@ -162,7 +162,6 @@ class CategoriasController
     if (isset($_POST['nombre'])) {
       $con = conectar_db_pdo();
       $gestor = new GestorCategorias($con);
-
       $gestorArticulos = new GestorArticulos($con);
       $id = $_POST['codigo'];
       $codigoAnterior = $_POST['codigoAnterior'];
@@ -180,9 +179,9 @@ class CategoriasController
         $catHijas = $gestor->getCategoriasByidPadre($codigoAnterior);
       }
 
-      if ($articulos > 0) {
+      if (count($articulos) > 0) {
         header('Location: ?action=gestion_categorias&error_editado=true');
-      } else if ($catHijas > 0) {
+      } else if (count($catHijas) > 0) {
         header('Location: ?action=gestion_categorias&cat_padre_edicion=true');
       } else {
         $categoriaPadre = $_POST['categoriaPadre'] !== 'null' ? $_POST['categoriaPadre'] : null;
@@ -194,7 +193,6 @@ class CategoriasController
         );
         $gestor->modificar($categoria, $codigoAnterior);
       }
-
     }
   }
 }
