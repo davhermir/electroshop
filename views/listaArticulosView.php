@@ -77,12 +77,13 @@ if (isset($codigoArticulo)) {
             if ($pagina == $i) {
                 echo $pagina . " ";
             } else {
+                $categoria = isset($cat) ? "&cat=" . $cat : "";
                 if (isset($asc)) {
-                    echo "<a href='/?action=mostrar_articulos&pagina=" . $i . "&order=" . $asc . "'>" . $i . "</a>  ";
+                    echo "<a href='/?action=mostrar_articulos&pagina=" . $i . "&order=" . $asc . $categoria  . "'>" . $i . "</a>  ";
                 } else if (isset($nombre)) {
                     echo "<a href='/?action=buscar_articulo&pagina=" . $i . "&nombre=" . $nombre . "'>" . $i . "</a>  ";
                 } else {
-                    echo "<a href='/?pagina=" . $i . "'>" . $i . "</a>  ";
+                    echo "<a href='/?pagina=" . $i . $categoria . "'>" . $i . "</a>  ";
                 }
             }
         }
